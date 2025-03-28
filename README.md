@@ -1,1 +1,0 @@
-# Hi This our Hack2Skill project
