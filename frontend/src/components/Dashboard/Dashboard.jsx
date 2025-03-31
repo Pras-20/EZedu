@@ -1,29 +1,114 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./Dashboard.css";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
 
 const Dashboard = () => {
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGender, setSelectedGender] = useState("");
+  const [selectedGrade, setSelectedGrade] = useState("");
+  const [filteredStudents, setFilteredStudents] = useState([]);
+  const [isAttendanceModalOpen, setAttendanceModalOpen] = useState(false);
+  const [selectedPeriod, setSelectedPeriod] = useState("");
+  const [attendance, setAttendance] = useState({});
 
-  const students = [
-    {
-      id: "01",
-      name: "Student 1",
-      gender: "Male",
-      grade: "10",
-      section: "A",
-      rollNo: "001",
-    },
-    {
-      id: "02",
-      name: "Student 2",
-      gender: "Female",
-      grade: "9",
-      section: "B",
-      rollNo: "002",
-    },
-    // Add more students as needed
+  const students = useMemo(
+    () => [
+      {
+        id: "01",
+        name: "John Smith",
+        gender: "Male",
+        grade: "10",
+        section: "A",
+        rollNo: "001",
+        attendance: "95%",
+      },
+      {
+        id: "02",
+        name: "Emma Davis",
+        gender: "Female",
+        grade: "9",
+        section: "B",
+        rollNo: "002",
+        attendance: "98%",
+      },
+      {
+        id: "03",
+        name: "Michael Johnson",
+        gender: "Male",
+        grade: "10",
+        section: "C",
+        rollNo: "003",
+        attendance: "92%",
+      },
+      {
+        id: "04",
+        name: "Sarah Wilson",
+        gender: "Female",
+        grade: "9",
+        section: "A",
+        rollNo: "004",
+        attendance: "96%",
+      },
+      {
+        id: "05",
+        name: "David Brown",
+        gender: "Male",
+        grade: "11",
+        section: "B",
+        rollNo: "005",
+        attendance: "89%",
+      },
+      {
+        id: "06",
+        name: "Lisa Anderson",
+        gender: "Female",
+        grade: "11",
+        section: "A",
+        rollNo: "006",
+        attendance: "94%",
+      },
+    ],
+    []
+  );
+
+  const schedule = [
+    { period: "1st", grade: "10", section: "A" },
+    { period: "2nd", grade: "9", section: "B" },
   ];
+
+  const filterStudents = useCallback(() => {
+    let filtered = [...students];
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (student) =>
+          student.name.toLowerCase().includes(query) ||
+          student.grade.includes(query) ||
+          student.section.toLowerCase().includes(query) ||
+          student.rollNo.includes(query)
+      );
+    }
+
+    if (selectedGender) {
+      filtered = filtered.filter(
+        (student) => student.gender === selectedGender
+      );
+    }
+
+    if (selectedGrade) {
+      filtered = filtered.filter((student) => student.grade === selectedGrade);
+    }
+
+    setFilteredStudents(filtered);
+  }, [searchQuery, selectedGender, selectedGrade, students]);
+
+  useEffect(() => {
+    filterStudents();
+  }, [filterStudents]);
 
   const handleProfileClick = () => {
     // Example functionality: Open profile menu or redirect
@@ -31,18 +116,59 @@ const Dashboard = () => {
     // You can replace this with actual functionality, like opening a modal or redirecting
   };
 
-  const handleSearchClick = () => {
+  const handleSearchClick = useCallback(() => {
     setSearchModalOpen(true);
-  };
+    setFilteredStudents(students);
+  }, [students]);
 
-  const handleStudentSelect = (student) => {
+  const handleStudentSelect = useCallback((student) => {
     setSelectedStudent(student);
-  };
+  }, []);
 
-  const closeSearchModal = () => {
+  const closeSearchModal = useCallback(() => {
     setSearchModalOpen(false);
     setSelectedStudent(null);
+    setSearchQuery("");
+    setSelectedGender("");
+    setSelectedGrade("");
+  }, []);
+
+  const handleMarkAttendanceClick = () => {
+    setAttendanceModalOpen(true);
   };
+
+  const handleAttendanceChange = (studentId, status) => {
+    console.log("Marking attendance:", studentId, status);
+    setAttendance((prev) => {
+      const newAttendance = { ...prev };
+      if (newAttendance[studentId] === status) {
+        delete newAttendance[studentId];
+      } else {
+        newAttendance[studentId] = status;
+      }
+      console.log("Updated attendance state:", newAttendance);
+      return newAttendance;
+    });
+  };
+
+  const downloadAttendance = () => {
+    const data = students.map((student) => ({
+      RollNo: student.rollNo,
+      Name: student.name,
+      Attendance: attendance[student.id] || "Not Marked",
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Attendance");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, "attendance.xlsx");
+  };
+
+  useEffect(() => {
+    console.log("Attendance state updated:", attendance);
+  }, [attendance]);
 
   return (
     <main className="dashboard">
@@ -66,7 +192,7 @@ const Dashboard = () => {
             </div>
             <span>Search Student</span>
           </button>
-          <button className="action-btn">
+          <button className="action-btn" onClick={handleMarkAttendanceClick}>
             <div className="circle-icon">
               <i className="fas fa-clipboard-list"></i>
             </div>
@@ -104,35 +230,36 @@ const Dashboard = () => {
               <input
                 type="text"
                 placeholder="Search by name, grade, or section..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <i className="fas fa-search"></i>
             </div>
             <div className="filters">
-              <select defaultValue="">
-                <option value="" disabled>
-                  Select Gender
-                </option>
-                <option value="all">All Genders</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+              <select
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
               </select>
-              <select defaultValue="">
-                <option value="" disabled>
-                  Select Grade
-                </option>
-                <option value="all">All Grades</option>
+              <select
+                value={selectedGrade}
+                onChange={(e) => setSelectedGrade(e.target.value)}
+              >
+                <option value="">Select Grade</option>
                 <option value="9">Grade 9</option>
                 <option value="10">Grade 10</option>
                 <option value="11">Grade 11</option>
-                <option value="12">Grade 12</option>
               </select>
             </div>
             <ul className="student-list">
-              {students.map((student) => (
+              {filteredStudents.map((student) => (
                 <li
                   key={student.id}
                   onClick={() => handleStudentSelect(student)}
+                  className="student-item"
                 >
                   <div className="student-avatar">
                     <i className="fas fa-user-circle"></i>
@@ -146,6 +273,9 @@ const Dashboard = () => {
                   </div>
                 </li>
               ))}
+              {filteredStudents.length === 0 && (
+                <li className="no-results">No students found</li>
+              )}
             </ul>
           </div>
         </div>
@@ -176,8 +306,85 @@ const Dashboard = () => {
               <strong>Roll No:</strong> {selectedStudent.rollNo}
             </p>
             <p>
-              <strong>Attendance:</strong> 95%
+              <strong>Attendance:</strong> {selectedStudent.attendance}
             </p>
+          </div>
+        </div>
+      )}
+
+      {isAttendanceModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content attendance-modal">
+            <button
+              className="close-btn"
+              onClick={() => setAttendanceModalOpen(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Mark Attendance</h2>
+            <div className="period-selection">
+              <label>Select Period:</label>
+              <select
+                value={selectedPeriod}
+                onChange={(e) => setSelectedPeriod(e.target.value)}
+              >
+                <option value="">Select a period</option>
+                {schedule.map((item) => (
+                  <option key={item.period} value={item.period}>
+                    {item.period} - Grade {item.grade} Section {item.section}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {selectedPeriod && (
+              <div className="attendance-content">
+                <h3>Students in {selectedPeriod}</h3>
+                <div className="attendance-list">
+                  {students.map((student) => (
+                    <div key={student.id} className="attendance-item">
+                      <div className="student-info">
+                        <div className="student-avatar">
+                          <i className="fas fa-user-circle"></i>
+                        </div>
+                        <span className="student-name">
+                          {student.name}{" "}
+                          <span className="roll-no">
+                            (Roll No: {student.rollNo})
+                          </span>
+                        </span>
+                      </div>
+                      <div className="attendance-buttons">
+                        <button
+                          className={`attendance-btn present ${
+                            attendance[student.id] === "Present" ? "active" : ""
+                          }`}
+                          onClick={() =>
+                            handleAttendanceChange(student.id, "Present")
+                          }
+                          type="button"
+                        >
+                          Present
+                        </button>
+                        <button
+                          className={`attendance-btn absent ${
+                            attendance[student.id] === "Absent" ? "active" : ""
+                          }`}
+                          onClick={() =>
+                            handleAttendanceChange(student.id, "Absent")
+                          }
+                          type="button"
+                        >
+                          Absent
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button className="download-btn" onClick={downloadAttendance}>
+                  Download Attendance
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -198,7 +405,7 @@ const Dashboard = () => {
           </section>
 
           <section className="tasks-section">
-            <h2>Today's tasks</h2>
+            {/* <h2>Today's tasks</h2> */}
             <div className="reminders-card">
               <div className="card-content">
                 <div className="card-icon">

@@ -47,7 +47,7 @@
   gap: 32px;
   position: relative;
   align-items: start;
-  margin-top: 0;
+  margin-top: 8px;
 }
 
 .dashboard-content::after {
@@ -58,7 +58,7 @@
 .main-content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
 /* Schedule section */
@@ -75,7 +75,7 @@
 
 /* Student Details section */
 .student-details {
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   max-width: 700px;
   margin-left: 0;
 }
@@ -91,7 +91,7 @@
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  padding-bottom: 32px;
+  padding-bottom: 24px;
   border-bottom: 1px solid #e0e0e0;
 }
 
@@ -185,6 +185,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  position: absolute;
+  top: 50px;
+  left: 100px;
+  width: 850px;
+  margin-left: -100px;
 }
 
 .card-icon {
@@ -239,7 +244,7 @@
 
 /* Today's Tasks Section */
 .todays-tasks {
-  margin: 32px 0;
+  margin: 32px;
 }
 
 .todays-tasks h2 {
@@ -247,6 +252,9 @@
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 24px;
+  position: absolute;
+  top: px;
+  left: 100px;
 }
 
 /* Reminders Card */
@@ -259,6 +267,12 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 32px;
+  position: absolute;
+  top: 150px;
+  left: 100px;
+  width: 850px;
+  margin-left: -100px;
+  margin-top: 85px;
 }
 
 .reminders-card .card-icon {
@@ -294,6 +308,8 @@
   flex-direction: column;
   justify-content: space-between;
   margin-top: 0;
+  position: absolute;
+  margin-top: -230px;
 }
 
 .daily-tasks-card h2 {
@@ -325,7 +341,7 @@
   background-color: #f1f3f4;
   border-radius: 16px;
   padding: 24px;
-  margin-top: 0;
+  margin-top: 16px;
 }
 
 .attendance-section h2 {
@@ -345,6 +361,7 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  margin-top: 5px;
 }
 
 .student-info {
@@ -438,19 +455,30 @@
 
 /* Educational Materials Section */
 .materials-section {
-  margin-top: 32px;
+  margin-top: 0;
+  position: absolute;
+  top: 300px;
+  left: 100px;
+  width: 850px;
+  margin-left: -100px;
+  margin-top: 100px;
 }
 
 .materials-section h2 {
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 24px;
+  color: #202124;
 }
 
 .materials-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
+  background-color: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .material-btn {
@@ -802,18 +830,31 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
   background-color: white;
   padding: 32px;
   border-radius: 16px;
-  width: 80%;
+  width: 90%;
   max-width: 800px;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .close-btn {
@@ -858,12 +899,14 @@
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.3s ease;
+  background-color: #f8f9fa;
 }
 
 .search-bar input:focus {
   border-color: #4285f4;
   outline: none;
   box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.1);
+  background-color: white;
 }
 
 .search-bar i {
@@ -883,14 +926,14 @@
 
 .filters select {
   flex: 1;
-  padding: 12px;
+  padding: 12px 16px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 14px;
   color: #202124;
   cursor: pointer;
   transition: all 0.3s ease;
-  background-color: white;
+  background-color: #f8f9fa;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235f6368' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -901,15 +944,18 @@
   border-color: #4285f4;
   outline: none;
   box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.1);
+  background-color: white;
 }
 
 .student-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
-.student-list li {
+.student-item {
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 8px;
@@ -919,12 +965,56 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  border: 1px solid #e0e0e0;
 }
 
-.student-list li:hover {
+.student-item:hover {
   background-color: #e8f0fe;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: #4285f4;
+}
+
+.student-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #4285f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.student-avatar i {
+  font-size: 24px;
+  color: white;
+}
+
+.student-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.student-info strong {
+  color: #202124;
+  font-size: 16px;
+}
+
+.student-info span {
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 24px;
+  color: #5f6368;
+  font-size: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 16px;
 }
 
 /* Styles for the student details modal */
@@ -947,6 +1037,11 @@
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.modal-content p:hover {
+  background-color: #e8f0fe;
 }
 
 .modal-content p strong {
@@ -954,20 +1049,24 @@
 }
 
 /* Scrollbar styling */
-.modal-content::-webkit-scrollbar {
+.modal-content::-webkit-scrollbar,
+.student-list::-webkit-scrollbar {
   width: 8px;
 }
 
-.modal-content::-webkit-scrollbar-track {
+.modal-content::-webkit-scrollbar-track,
+.student-list::-webkit-scrollbar-track {
   background: #f1f3f4;
   border-radius: 4px;
 }
 
-.modal-content::-webkit-scrollbar-thumb {
+.modal-content::-webkit-scrollbar-thumb,
+.student-list::-webkit-scrollbar-thumb {
   background: #dadce0;
   border-radius: 4px;
 }
 
-.modal-content::-webkit-scrollbar-thumb:hover {
+.modal-content::-webkit-scrollbar-thumb:hover,
+.student-list::-webkit-scrollbar-thumb:hover {
   background: #5f6368;
 }

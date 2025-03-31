@@ -19,15 +19,24 @@ const Sidebar = () => {
           <span>Home</span>
         </Link>
 
-        <Link to="/dashboard" className="nav-item">
+        <Link to="/teacher-dashboard" className="nav-item">
+          <div className="nav-icon">
+            <i className="fas fa-chalkboard-teacher"></i>
+          </div>
           <span>Teacher Dashboard</span>
         </Link>
 
         <Link to="/classes" className="nav-item">
+          <div className="nav-icon">
+            <i className="fas fa-users"></i>
+          </div>
           <span>Classes</span>
         </Link>
 
         <Link to="/schedule" className="nav-item">
+          <div className="nav-icon">
+            <i className="fas fa-calendar-alt"></i>
+          </div>
           <span>Schedule/Calendar</span>
         </Link>
       </nav>
