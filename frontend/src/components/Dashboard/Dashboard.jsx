@@ -13,6 +13,10 @@ const Dashboard = () => {
   const [isAttendanceModalOpen, setAttendanceModalOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState("");
   const [attendance, setAttendance] = useState({});
+  const [isReportModalOpen, setReportModalOpen] = useState(false);
+  const [selectedReportStudent, setSelectedReportStudent] = useState(null);
+  const [studentMarks, setStudentMarks] = useState({});
+  const [selectedStudentMarks, setSelectedStudentMarks] = useState(null);
 
   const students = useMemo(
     () => [
@@ -170,6 +174,71 @@ const Dashboard = () => {
     console.log("Attendance state updated:", attendance);
   }, [attendance]);
 
+  const generateRandomMarks = () => {
+    const subjects = ["Maths", "Science", "Social Science", "Hindi", "English"];
+    const marks = {};
+
+    students.forEach((student) => {
+      marks[student.id] = {
+        UT1: subjects.reduce((acc, subject) => {
+          acc[subject] = Math.floor(Math.random() * 101); // Random marks between 0-100
+          return acc;
+        }, {}),
+        UT2: subjects.reduce((acc, subject) => {
+          acc[subject] = Math.floor(Math.random() * 101); // Random marks between 0-100
+          return acc;
+        }, {}),
+      };
+    });
+
+    setStudentMarks(marks);
+  };
+
+  const handleGenerateReportClick = () => {
+    generateRandomMarks();
+    setReportModalOpen(true);
+  };
+
+  const downloadReport = () => {
+    const data = Object.keys(studentMarks).map((studentId) => {
+      const student = students.find((s) => s.id === studentId);
+      return {
+        Name: student.name,
+        ...studentMarks[studentId].UT1,
+        ...studentMarks[studentId].UT2,
+      };
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Student Performance");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, "student_performance_report.xlsx");
+  };
+
+  const handleStudentSelectReport = (student) => {
+    setSelectedReportStudent(student);
+    setSelectedStudentMarks(studentMarks[student.id]);
+  };
+
+  const downloadIndividualReport = () => {
+    if (!selectedReportStudent) return;
+
+    const data = {
+      Name: selectedReportStudent.name,
+      ...selectedStudentMarks.UT1,
+      ...selectedStudentMarks.UT2,
+    };
+
+    const ws = XLSX.utils.json_to_sheet([data]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Student Performance");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, `${selectedReportStudent.name}_performance_report.xlsx`);
+  };
+
   return (
     <main className="dashboard">
       <header className="dashboard-header">
@@ -204,9 +273,9 @@ const Dashboard = () => {
             </div>
             <span>Answer Queries</span>
           </button>
-          <button className="action-btn">
+          <button className="action-btn" onClick={handleGenerateReportClick}>
             <div className="circle-icon">
-              <i className="fas fa-chart-bar"></i>
+              <i className="fas fa-chart-line"></i>
             </div>
             <span>Generate Report</span>
           </button>
@@ -377,6 +446,72 @@ const Dashboard = () => {
                 Download Attendance
               </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {isReportModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-btn" onClick={() => setReportModalOpen(false)}>
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Student Performance Report</h2>
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="Search by student name..."
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <i className="fas fa-search"></i>
+            </div>
+            <ul className="student-list">
+              {Object.keys(studentMarks).map((studentId) => {
+                const student = students.find((s) => s.id === studentId);
+                return (
+                  <li key={studentId} onClick={() => handleStudentSelectReport(student)} className="student-item">
+                    <div className="student-info">
+                      <strong>{student.name}</strong>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            <button className="download-btn" onClick={downloadReport}>
+              Download All Reports
+            </button>
+          </div>
+        </div>
+      )}
+
+      {selectedStudentMarks && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-btn" onClick={() => setSelectedStudentMarks(null)}>
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>{selectedReportStudent.name}'s Marks</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>UT-1</th>
+                  <th>UT-2</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(selectedStudentMarks.UT1).map((subject) => (
+                  <tr key={subject}>
+                    <td>{subject}</td>
+                    <td>{selectedStudentMarks.UT1[subject]}</td>
+                    <td>{selectedStudentMarks.UT2[subject]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button className="download-btn" onClick={downloadIndividualReport}>
+              Download Individual Report
+            </button>
           </div>
         </div>
       )}
