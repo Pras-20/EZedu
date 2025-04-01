@@ -315,20 +315,18 @@ const Dashboard = () => {
       {isAttendanceModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content attendance-modal">
-            <button
-              className="close-btn"
-              onClick={() => setAttendanceModalOpen(false)}
-            >
+            <button className="close-btn" onClick={() => setAttendanceModalOpen(false)}>
               <i className="fas fa-times"></i>
             </button>
             <h2>Mark Attendance</h2>
-            <div className="period-selection">
+
+            <div className="filter-section">
               <label>Select Period:</label>
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}
               >
-                <option value="">Select a period</option>
+                <option value="">Select a Period</option>
                 {schedule.map((item) => (
                   <option key={item.period} value={item.period}>
                     {item.period} - Grade {item.grade} Section {item.section}
@@ -336,54 +334,48 @@ const Dashboard = () => {
                 ))}
               </select>
             </div>
+
             {selectedPeriod && (
-              <div className="attendance-content">
+              <div className="student-list">
                 <h3>Students in {selectedPeriod}</h3>
-                <div className="attendance-list">
-                  {students.map((student) => (
-                    <div key={student.id} className="attendance-item">
-                      <div className="student-info">
-                        <div className="student-avatar">
-                          <i className="fas fa-user-circle"></i>
-                        </div>
-                        <span className="student-name">
-                          {student.name}{" "}
-                          <span className="roll-no">
-                            (Roll No: {student.rollNo})
-                          </span>
-                        </span>
-                      </div>
-                      <div className="attendance-buttons">
-                        <button
-                          className={`attendance-btn present ${
-                            attendance[student.id] === "Present" ? "active" : ""
-                          }`}
-                          onClick={() =>
-                            handleAttendanceChange(student.id, "Present")
-                          }
-                          type="button"
-                        >
-                          Present
-                        </button>
-                        <button
-                          className={`attendance-btn absent ${
-                            attendance[student.id] === "Absent" ? "active" : ""
-                          }`}
-                          onClick={() =>
-                            handleAttendanceChange(student.id, "Absent")
-                          }
-                          type="button"
-                        >
-                          Absent
-                        </button>
-                      </div>
+                {students.map((student) => (
+                  <div key={student.id} className="student-item">
+                    <div className="student-avatar">
+                      <i className="fas fa-user-circle"></i>
                     </div>
-                  ))}
-                </div>
-                <button className="download-btn" onClick={downloadAttendance}>
-                  Download Attendance
-                </button>
+                    <div className="student-info">
+                      <strong>{student.name}</strong>
+                      <span>Roll No: {student.rollNo}</span>
+                    </div>
+                    <div className="attendance-buttons">
+                      <button
+                        className={`attendance-btn present ${
+                          attendance[student.id] === "Present" ? "active" : ""
+                        }`}
+                        onClick={() => handleAttendanceChange(student.id, "Present")}
+                        type="button"
+                      >
+                        Present
+                      </button>
+                      <button
+                        className={`attendance-btn absent ${
+                          attendance[student.id] === "Absent" ? "active" : ""
+                        }`}
+                        onClick={() => handleAttendanceChange(student.id, "Absent")}
+                        type="button"
+                      >
+                        Absent
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
+            )}
+
+            {selectedPeriod && (
+              <button className="download-btn" onClick={downloadAttendance}>
+                Download Attendance
+              </button>
             )}
           </div>
         </div>
@@ -446,7 +438,7 @@ const Dashboard = () => {
         <aside className="dashboard-sidebar">
           <section className="daily-tasks-card">
             <h2>Daily tasks</h2>
-            <p>manage your daily tasks efficiently!</p>
+            <p>Manage your daily tasks efficiently!</p>
             <button className="add-btn">Add</button>
           </section>
 

@@ -78,13 +78,17 @@
   margin-bottom: 16px;
   max-width: 700px;
   margin-left: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .student-details h2 {
   color: #202124;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
   margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .action-buttons {
@@ -93,6 +97,8 @@
   gap: 24px;
   padding-bottom: 24px;
   border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  z-index: 2;
 }
 
 .action-btn {
@@ -106,6 +112,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   flex: 1;
+  position: relative;
+  z-index: 2;
 }
 
 .circle-icon {
@@ -119,6 +127,7 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  z-index: 5;
 }
 
 .circle-icon i {
@@ -185,11 +194,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-  position: absolute;
-  top: 50px;
-  left: 100px;
-  width: 850px;
-  margin-left: -100px;
+  position: relative;
+  margin-top: -160px;
 }
 
 .card-icon {
@@ -267,12 +273,8 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 32px;
-  position: absolute;
-  top: 150px;
-  left: 100px;
-  width: 850px;
-  margin-left: -100px;
-  margin-top: 85px;
+  position: relative;
+  margin-top: 10px;
 }
 
 .reminders-card .card-icon {
@@ -308,8 +310,8 @@
   flex-direction: column;
   justify-content: space-between;
   margin-top: 0;
-  position: absolute;
-  margin-top: -230px;
+  position: relative;
+  margin-top: -220px;
 }
 
 .daily-tasks-card h2 {
@@ -341,7 +343,9 @@
   background-color: #f1f3f4;
   border-radius: 16px;
   padding: 24px;
-  margin-top: 16px;
+  margin-top: 50px;
+  position: relative;
+  z-index: 3;
 }
 
 .attendance-section h2 {
@@ -353,7 +357,7 @@
 .attendance-item {
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 5px;
   background-color: #f1f3f4;
   border-radius: 8px;
   margin-bottom: 8px;
@@ -375,6 +379,8 @@
   color: #5f6368;
   font-size: 14px;
   min-width: 24px;
+  margin-right: auto;
+  margin-top: 25px;
 }
 
 .student-avatar {
@@ -385,6 +391,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 12px;
+  margin-top: -50px;
 }
 
 .student-avatar i {
@@ -395,11 +403,14 @@
 .student-name {
   font-size: 14px;
   font-weight: 500;
+  margin-top: 40px;
+  flex: 1;
 }
 
 .attendance-percentage {
   color: #5f6368;
   font-size: 14px;
+  margin-left: auto;
 }
 
 .view-all-btn {
@@ -456,12 +467,9 @@
 /* Educational Materials Section */
 .materials-section {
   margin-top: 0;
-  position: absolute;
-  top: 300px;
-  left: 100px;
-  width: 850px;
-  margin-left: -100px;
-  margin-top: 100px;
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .materials-section h2 {
@@ -661,6 +669,13 @@
   .student-details {
     max-width: 100%;
   }
+
+  .assignments-card,
+  .reminders-card,
+  .daily-tasks-card {
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 768px) {
@@ -676,13 +691,13 @@
   }
 
   .action-buttons {
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
 
   .action-btn {
-    flex: 0 0 calc(33.333% - 16px);
+    flex: 1 0 100%;
+    margin-bottom: 16px;
   }
 
   .circle-icon {
@@ -983,6 +998,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: -45px;
 }
 
 .student-avatar i {
@@ -1069,4 +1085,69 @@
 .modal-content::-webkit-scrollbar-thumb:hover,
 .student-list::-webkit-scrollbar-thumb:hover {
   background: #5f6368;
+}
+
+.attendance-buttons {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}
+
+.attendance-btn {
+  background-color: white; /* Default background color */
+  color: black; /* Default text color */
+  border: 2px solid #e0e0e0; /* Border for visibility */
+  padding: 10px 20px; /* Padding for buttons */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+.attendance-btn.present {
+  background-color: #ffffff; /* White background for Present */
+  color: rgb(0, 0, 0); /* Black text for Present */
+}
+
+.attendance-btn.absent {
+  background-color: #ffffff; /* White background for Absent */
+  color: rgb(0, 0, 0); /* Black text for Absent */
+}
+
+.attendance-btn.present:hover {
+  background-color: #4caf50; /* Green on hover for Present */
+  color: white; /* White text on hover */
+}
+
+.attendance-btn.absent:hover {
+  background-color: #f44336; /* Red on hover for Absent */
+  color: white; /* White text on hover */
+}
+
+.attendance-btn.active {
+  opacity: 0.8; /* Dim the active button */
+}
+
+.download-btn {
+  background-color: white; /* Default background color */
+  color: black; /* Default text color */
+  border: 2px solid #e0e0e0; /* Border for visibility */
+  padding: 10px 20px; /* Padding for buttons */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+.download-btn:hover {
+  background-color: #4285f4; /* Change to primary color on hover */
+  color: white; /* White text on hover */
+}
+
+/* Style for the select dropdown */
+.filter-section select {
+  background-color: #f1f1f1; /* Default background color */
+  color: black; /* Default text color */
+  border: 2px solid #e0e0e0; /* Border for visibility */
+  padding: 10px; /* Padding for dropdown */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
 }
