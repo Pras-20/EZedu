@@ -17,6 +17,9 @@ const Dashboard = () => {
   const [selectedReportStudent, setSelectedReportStudent] = useState(null);
   const [studentMarks, setStudentMarks] = useState({});
   const [selectedStudentMarks, setSelectedStudentMarks] = useState(null);
+  const [isAssignmentModalOpen, setAssignmentModalOpen] = useState(false);
+  const [assignments, setAssignments] = useState([]);
+  const [currentAssignment, setCurrentAssignment] = useState(null);
 
   const students = useMemo(
     () => [
@@ -239,6 +242,28 @@ const Dashboard = () => {
     saveAs(blob, `${selectedReportStudent.name}_performance_report.xlsx`);
   };
 
+  const handleCreateAssignment = () => {
+    setCurrentAssignment(null);
+    setAssignmentModalOpen(true);
+  };
+
+  const handleSaveAssignment = (assignment) => {
+    if (currentAssignment) {
+      // Edit existing assignment
+      setAssignments(
+        assignments.map((a) => (a.id === assignment.id ? assignment : a))
+      );
+    } else {
+      // Create new assignment
+      setAssignments([...assignments, { ...assignment, id: Date.now() }]);
+    }
+    setAssignmentModalOpen(false);
+  };
+
+  const handleDeleteAssignment = (id) => {
+    setAssignments(assignments.filter((a) => a.id !== id));
+  };
+
   return (
     <main className="dashboard">
       <header className="dashboard-header">
@@ -384,7 +409,10 @@ const Dashboard = () => {
       {isAttendanceModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content attendance-modal">
-            <button className="close-btn" onClick={() => setAttendanceModalOpen(false)}>
+            <button
+              className="close-btn"
+              onClick={() => setAttendanceModalOpen(false)}
+            >
               <i className="fas fa-times"></i>
             </button>
             <h2>Mark Attendance</h2>
@@ -421,7 +449,9 @@ const Dashboard = () => {
                         className={`attendance-btn present ${
                           attendance[student.id] === "Present" ? "active" : ""
                         }`}
-                        onClick={() => handleAttendanceChange(student.id, "Present")}
+                        onClick={() =>
+                          handleAttendanceChange(student.id, "Present")
+                        }
                         type="button"
                       >
                         Present
@@ -430,7 +460,9 @@ const Dashboard = () => {
                         className={`attendance-btn absent ${
                           attendance[student.id] === "Absent" ? "active" : ""
                         }`}
-                        onClick={() => handleAttendanceChange(student.id, "Absent")}
+                        onClick={() =>
+                          handleAttendanceChange(student.id, "Absent")
+                        }
                         type="button"
                       >
                         Absent
@@ -453,7 +485,10 @@ const Dashboard = () => {
       {isReportModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <button className="close-btn" onClick={() => setReportModalOpen(false)}>
+            <button
+              className="close-btn"
+              onClick={() => setReportModalOpen(false)}
+            >
               <i className="fas fa-times"></i>
             </button>
             <h2>Student Performance Report</h2>
@@ -469,7 +504,11 @@ const Dashboard = () => {
               {Object.keys(studentMarks).map((studentId) => {
                 const student = students.find((s) => s.id === studentId);
                 return (
-                  <li key={studentId} onClick={() => handleStudentSelectReport(student)} className="student-item">
+                  <li
+                    key={studentId}
+                    onClick={() => handleStudentSelectReport(student)}
+                    className="student-item"
+                  >
                     <div className="student-info">
                       <strong>{student.name}</strong>
                     </div>
@@ -487,7 +526,10 @@ const Dashboard = () => {
       {selectedStudentMarks && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <button className="close-btn" onClick={() => setSelectedStudentMarks(null)}>
+            <button
+              className="close-btn"
+              onClick={() => setSelectedStudentMarks(null)}
+            >
               <i className="fas fa-times"></i>
             </button>
             <h2>{selectedReportStudent.name}'s Marks</h2>
@@ -528,7 +570,9 @@ const Dashboard = () => {
                 <p>Track student assignment easily!</p>
               </div>
             </div>
-            <button className="create-btn">Create</button>
+            <button className="create-btn" onClick={handleCreateAssignment}>
+              Create
+            </button>
           </section>
 
           <section className="tasks-section">
@@ -599,6 +643,46 @@ const Dashboard = () => {
           </section>
         </aside>
       </div>
+
+      {isAssignmentModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button
+              className="close-btn"
+              onClick={() => setAssignmentModalOpen(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>
+              {currentAssignment ? "Edit Assignment" : "Create Assignment"}
+            </h2>
+
+            <form onSubmit={handleSaveAssignment}>
+              <input type="text" placeholder="Assignment Title" required />
+              <textarea
+                placeholder="Assignment Description"
+                required
+              ></textarea>
+
+              <label>Submission Deadline</label>
+              <input type="date" required />
+
+              <label>Upload Files</label>
+              <input type="file" accept=".pdf,.doc,.docx" multiple />
+
+              <button type="submit">Save</button>
+            </form>
+
+            {currentAssignment && (
+              <button
+                onClick={() => handleDeleteAssignment(currentAssignment.id)}
+              >
+                Delete
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 };
