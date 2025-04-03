@@ -1168,3 +1168,59 @@
   background-color: #4285f4;
   color: #ffffff;
 }
+
+/* Styles for the marks table in the report modal */
+.modal-content table {
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapse borders */
+  margin-top: 20px; /* Space above the table */
+}
+
+.modal-content th,
+.modal-content td {
+  border: 1px solid #e0e0e0; /* Border for table cells */
+  padding: 12px; /* Padding for table cells */
+  text-align: left; /* Align text to the left */
+}
+
+.modal-content th {
+  background-color: #f1f3f4; /* Background color for header */
+  color: #202124; /* Text color for header */
+  font-weight: 600; /* Bold text for header */
+}
+
+.modal-content tr:nth-child(even) {
+  background-color: #f9f9f9; /* Zebra striping for even rows */
+}
+
+.modal-content tr:hover {
+  background-color: #e8f0fe; /* Highlight row on hover */
+}
+
+/* Styles for the download button in the report modal */
+.modal-content .download-btn {
+  margin-top: 20px; /* Add space above the button */
+  background-color: white; /* Default background color */
+  color: black; /* Default text color */
+  border: 2px solid #e0e0e0; /* Border for visibility */
+  padding: 10px 20px; /* Padding for buttons */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+.modal-content .download-btn:hover {
+  background-color: #4285f4; /* Change to primary color on hover */
+  color: white; /* White text on hover */
+}
+
+/* Styles for the filter section in the attendance modal */
+.filter-section {
+  display: flex;
+  align-items: center; /* Align items vertically */
+}
+
+.filter-section label {
+  margin-right: 8px; /* Add space to the right of the label */
+  font-weight: 500; /* Optional: make the label bold */
+}
