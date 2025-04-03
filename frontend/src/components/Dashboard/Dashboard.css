@@ -1122,3 +1122,49 @@
   cursor: pointer; /* Pointer cursor on hover */
   transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
 }
+
+/* Styles for the assignment modal */
+.assignment-modal .modal-content {
+  padding: 20px; /* Same padding as search modal */
+  border-radius: 8px; /* Same border radius */
+  background-color: #fff; /* Same background color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Same shadow */
+}
+
+.assignment-modal input[type="text"],
+.assignment-modal textarea,
+.assignment-modal input[type="date"],
+.assignment-modal input[type="file"] {
+  width: 100%; /* Full width */
+  padding: 10px; /* Padding for input and textarea */
+  margin-bottom: 15px; /* Spacing below input and textarea */
+  border: 2px solid #e0e0e0; /* Border style */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #f8f9fa; /* Background color */
+  transition: border-color 0.3s ease; /* Smooth transition */
+}
+
+.assignment-modal input[type="text"]:focus,
+.assignment-modal textarea:focus,
+.assignment-modal input[type="date"]:focus,
+.assignment-modal input[type="file"]:focus {
+  border-color: #4285f4; /* Change border color on focus */
+  outline: none; /* Remove outline */
+  box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.1); /* Add shadow on focus */
+}
+
+/* Styles for the Save button */
+.assignment-modal button[type="submit"] {
+  background-color: #ffffff; /* Primary color */
+  color: #000000; /* White text */
+  border: 2px solid #e0e0e0; /* No border */
+  padding: 10px 20px; /* Padding for button */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.assignment-modal button[type="submit"]:hover {
+  background-color: #4285f4;
+  color: #ffffff;
+}

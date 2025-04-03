@@ -646,7 +646,7 @@ const Dashboard = () => {
 
       {isAssignmentModalOpen && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-content assignment-modal">
             <button
               className="close-btn"
               onClick={() => setAssignmentModalOpen(false)}
