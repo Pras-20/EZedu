@@ -1,59 +1,95 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
 const Sidebar = () => {
+  const location = useLocation();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+    // Update main content margin
+    document.documentElement.style.setProperty(
+      "--sidebar-width",
+      !isCollapsed ? "80px" : "250px"
+    );
+  };
+
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="logo-container">
         <div className="logo">
           <i className="fas fa-graduation-cap"></i>
         </div>
+        <button className="toggle-btn" onClick={toggleSidebar}>
+          <i className={`fas fa-chevron-${isCollapsed ? "right" : "left"}`}></i>
+        </button>
       </div>
 
       <nav className="nav-menu">
-        <Link to="/" className="nav-item active">
+        <Link to="/" className={`nav-item ${isActive("/") ? "active" : ""}`}>
           <div className="nav-icon">
             <i className="fas fa-home"></i>
           </div>
-          <span>Home</span>
+          <span className="nav-text">Home</span>
         </Link>
 
-        <Link to="/teacher-dashboard" className="nav-item">
+        <Link
+          to="/teacher-dashboard"
+          className={`nav-item ${
+            isActive("/teacher-dashboard") ? "active" : ""
+          }`}
+        >
           <div className="nav-icon">
             <i className="fas fa-chalkboard-teacher"></i>
           </div>
-          <span>Teacher Dashboard</span>
+          <span className="nav-text">Teacher Dashboard</span>
         </Link>
 
-        <Link to="/classes" className="nav-item">
+        <Link
+          to="/classes"
+          className={`nav-item ${isActive("/classes") ? "active" : ""}`}
+        >
           <div className="nav-icon">
             <i className="fas fa-users"></i>
           </div>
-          <span>Classes</span>
+          <span className="nav-text">Classes</span>
         </Link>
 
-        <Link to="/schedule" className="nav-item">
+        <Link
+          to="/schedule"
+          className={`nav-item ${isActive("/schedule") ? "active" : ""}`}
+        >
           <div className="nav-icon">
             <i className="fas fa-calendar-alt"></i>
           </div>
-          <span>Schedule/Calendar</span>
+          <span className="nav-text">Schedule/Calendar</span>
         </Link>
       </nav>
 
       <div className="sidebar-footer">
-        <Link to="/notifications" className="nav-item">
+        <Link
+          to="/notifications"
+          className={`nav-item ${isActive("/notifications") ? "active" : ""}`}
+        >
           <div className="nav-icon">
             <i className="fas fa-bell"></i>
           </div>
-          <span>Notifications</span>
+          <span className="nav-text">Notifications</span>
         </Link>
 
-        <Link to="/settings" className="nav-item">
+        <Link
+          to="/settings"
+          className={`nav-item ${isActive("/settings") ? "active" : ""}`}
+        >
           <div className="nav-icon">
             <i className="fas fa-cog"></i>
           </div>
-          <span>Settings</span>
+          <span className="nav-text">Settings</span>
         </Link>
       </div>
     </aside>
