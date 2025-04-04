@@ -32,7 +32,7 @@
 /* Top Row Sections */
 .calendar-section,
 .schedule-section {
-  height: 260px;
+  height: 380px;
   overflow: hidden;
   max-height: none;
   overflow-y: auto;
@@ -60,13 +60,15 @@
 
 /* Bottom Row Section */
 .notifications-section {
-  grid-column: 1;
-  height: auto;
-  grid-column: 1 / -1;
-  height: 160px;
-  overflow: hidden;
-  max-height: none;
-  overflow-y: auto;
+  flex: 1;
+  background: var(--section-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--section-shadow);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 400px;
 }
 
 .notifications-section:hover {
@@ -113,6 +115,12 @@
 .schedule-table {
   flex: 1;
   overflow: hidden;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e8f5e9;
+  max-height: 320px;
+  overflow-y: auto;
 }
 
 .schedule-table:hover {
@@ -184,10 +192,10 @@
   padding: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   grid-column: 1;
-  height: fit-content;
+  height: 380px;
   display: flex;
   flex-direction: column;
-  max-height: 290px;
+  max-height: 380px;
   overflow-y: scroll;
 }
 
@@ -270,7 +278,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   grid-column: 2;
   position: relative;
-  max-height: 320px;
+  max-height: 380px;
   overflow-y: auto;
 }
 
@@ -395,15 +403,6 @@
   outline: none;
   border-color: #2e7d32;
   box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
-}
-
-.schedule-table {
-  width: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #e8f5e9;
-  max-height: 220px;
-  overflow-y: auto;
 }
 
 .schedule-header {
@@ -614,24 +613,15 @@
 }
 
 /* Notifications Section */
-.notifications-section {
-  background: white;
-  border-radius: 10px;
-  padding: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  grid-column: 1;
-  max-height: 250px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
 .notification-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  max-height: 180px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  gap: 15px;
+  height: calc(100% - 60px);
 }
 
 .notification-item {
@@ -780,13 +770,15 @@
 
 /* Stats Section */
 .stats-section {
-  background: white;
-  border-radius: 10px;
-  padding: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  grid-column: 2;
-  max-height: 350px;
-  overflow-y: auto;
+  flex: 1;
+  background: var(--section-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--section-shadow);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 400px;
 }
 
 .stats-section .section-header {
@@ -1835,6 +1827,10 @@
   border-radius: 3px;
 }
 
+.student-list::-webkit-scrollbar-thumb:hover {
+  background: #1b5e20;
+}
+
 /* Ensure other elements stay below popup */
 .teacher-dashboard {
   position: relative;
@@ -1874,13 +1870,55 @@
   margin-bottom: 8px;
 }
 
-.subject-details-content {
-  flex: 1;
+.subject-details-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1b5e20;
   display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding-bottom: 24px;
-  overflow-y: auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.subject-details-title i {
+  color: #2e7d32;
+  font-size: 18px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Back to Overview Button */
+.back-to-overview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #2e7d32;
+  border: 1px solid #2e7d32;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-to-overview:hover {
+  background: #2e7d32;
+  color: white;
+  transform: translateX(-5px);
+}
+
+.back-to-overview i {
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.back-to-overview:hover i {
+  transform: translateX(-3px);
 }
 
 /* Stats Grid */
@@ -2107,37 +2145,6 @@
   gap: 4px;
 }
 
-/* Back to Overview Button */
-.back-to-overview {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background: #f8f9fa;
-  color: #2e7d32;
-  border: 1px solid #2e7d32;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.back-to-overview:hover {
-  background: #2e7d32;
-  color: white;
-  transform: translateX(-5px);
-}
-
-.back-to-overview i {
-  font-size: 14px;
-  transition: transform 0.2s ease;
-}
-
-.back-to-overview:hover i {
-  transform: translateX(-3px);
-}
-
 /* Chart Styles */
 .chart-bars {
   display: flex;
@@ -2267,4 +2274,347 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #1b5e20;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.view-modal,
+.edit-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 500px;
+  max-width: 90vw;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #666;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s;
+}
+
+.close-modal:hover {
+  color: #333;
+}
+
+/* View Modal Styles */
+.detail-item {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.detail-label {
+  font-weight: 600;
+  width: 100px;
+  color: #666;
+}
+
+.detail-value {
+  flex: 1;
+  color: #333;
+}
+
+.detail-value i {
+  margin-right: 8px;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.875rem;
+  display: inline-block;
+}
+
+/* Edit Modal Styles */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #666;
+}
+
+.form-group input,
+.form-group select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.save-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #1976d2;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Updated Overview Status Styles */
+.overview-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  text-transform: capitalize;
+  transition: all 0.2s;
+}
+
+.overview-status:hover {
+  filter: brightness(0.9);
+}
+
+.student-selection-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 600px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.student-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-btn:hover {
+  background: #f0f0f0;
+  border-color: #bbb;
+}
+
+.filter-btn.active {
+  background: #2196f3;
+  color: white;
+  border-color: #2196f3;
+}
+
+.interest-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
+
+.interest-tag {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+.students-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
+.student-item {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s;
+}
+
+.student-item:hover {
+  border-color: #2196f3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);
+}
+
+.student-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.student-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #2196f3;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.student-name {
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+}
+
+.student-interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  padding-left: 30px;
+}
+
+.modal-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.send-notification-btn {
+  padding: 10px 20px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.send-notification-btn:hover {
+  background: #1976d2;
+}
+
+.send-notification-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Scrollbar styles for the students list */
+.students-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.students-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.students-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.students-list::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }

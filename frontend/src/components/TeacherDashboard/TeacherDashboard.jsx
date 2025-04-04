@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import "./TeacherDashboard.css";
 
 const TeacherDashboard = () => {
@@ -180,19 +180,27 @@ const TeacherDashboard = () => {
   };
 
   const handlePrevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
+    );
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
+    );
   };
 
   const handlePrevYear = () => {
-    setCurrentDate(new Date(currentDate.getFullYear() - 1, currentDate.getMonth()));
+    setCurrentDate(
+      new Date(currentDate.getFullYear() - 1, currentDate.getMonth())
+    );
   };
 
   const handleNextYear = () => {
-    setCurrentDate(new Date(currentDate.getFullYear() + 1, currentDate.getMonth()));
+    setCurrentDate(
+      new Date(currentDate.getFullYear() + 1, currentDate.getMonth())
+    );
   };
 
   const toggleTaskCompletion = (id) => {
@@ -385,90 +393,75 @@ const TeacherDashboard = () => {
   const [overviewItems, setOverviewItems] = useState([
     {
       id: 1,
-      title: "Total Classes Conducted",
+      title: "Mathematics Chapter 5",
+      value: "85%",
       status: "completed",
-      date: new Date().toISOString().split("T")[0],
-      type: "classes",
-      description: "15 classes conducted this month",
-      value: "15",
+      icon: "fa-calculator",
     },
     {
       id: 2,
-      title: "Pending Assignments",
-      status: "pending",
-      date: new Date().toISOString().split("T")[0],
-      type: "assignments",
-      description: "12 assignments need review",
-      value: "12",
+      title: "Science Lab Reports",
+      value: "60%",
+      status: "in-review",
+      icon: "fa-flask",
     },
     {
       id: 3,
-      title: "Student Attendance Rate",
-      status: "in-review",
-      date: new Date().toISOString().split("T")[0],
-      type: "attendance",
-      description: "Current attendance rate at 92%",
-      value: "92%",
-    },
-    {
-      id: 4,
-      title: "Upcoming Events",
+      title: "Literature Essays",
+      value: "40%",
       status: "pending",
-      date: new Date(new Date().setDate(new Date().getDate() + 2))
-        .toISOString()
-        .split("T")[0],
-      type: "events",
-      description: "Parent-Teacher Meeting on Friday",
-      value: "Friday",
-    },
-    {
-      id: 5,
-      title: "Performance Insights",
-      status: "in-review",
-      date: new Date().toISOString().split("T")[0],
-      type: "performance",
-      description: "5 students need extra attention in Math",
-      value: "5",
-    },
-    {
-      id: 6,
-      title: "Announcements",
-      status: "pending",
-      date: new Date(new Date().setDate(new Date().getDate() + 2))
-        .toISOString()
-        .split("T")[0],
-      type: "announcement",
-      description: "School trip registrations close in 2 days",
-      value: "2 days",
+      icon: "fa-book",
     },
   ]);
+
+  const statusTypes = {
+    pending: { label: "Pending", color: "#ffa726" },
+    "in-review": { label: "In Review", color: "#29b6f6" },
+    completed: { label: "Completed", color: "#66bb6a" },
+    "on-hold": { label: "On Hold", color: "#ef5350" },
+    "in-progress": { label: "In Progress", color: "#8e24aa" },
+  };
 
   const handleStatusChange = (id) => {
     setOverviewItems((items) =>
       items.map((item) => {
         if (item.id === id) {
-          const statusMap = {
-            pending: "in-review",
-            "in-review": "completed",
-            completed: "pending",
-          };
-          return { ...item, status: statusMap[item.status] };
+          const statuses = Object.keys(statusTypes);
+          const currentIndex = statuses.indexOf(item.status);
+          const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+          return { ...item, status: nextStatus };
         }
         return item;
       })
     );
   };
 
-  const handleViewItem = (id) => {
+  const handleView = (id) => {
     const item = overviewItems.find((item) => item.id === id);
-    alert(`Viewing details for: ${item.title}`);
-    // You can implement a modal or navigation here
+    setSelectedItem(item);
+    setShowViewModal(true);
   };
 
-  const handleEditItem = (id) => {
+  const handleEdit = (id) => {
     const item = overviewItems.find((item) => item.id === id);
-    alert(`Editing: ${item.title}`);
-    // You can implement an edit modal here
+    setSelectedItem(item);
+    setEditFormData({
+      title: item.title,
+      value: item.value,
+      status: item.status,
+      icon: item.icon,
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    setOverviewItems((items) =>
+      items.map((item) =>
+        item.id === selectedItem.id ? { ...item, ...editFormData } : item
+      )
+    );
+    setShowEditModal(false);
   };
 
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -592,14 +585,6 @@ const TeacherDashboard = () => {
       return "mark-needs-improvement";
     };
 
-    const handleAnswerQueries = () => {
-      // Set window.location.href directly to the full URL
-      const baseUrl = window.location.origin;
-      // For hash router, we need to use the hash format
-      window.location.href = `${baseUrl}/#/teacher-queries`;
-      // This forces a complete page reload and should resolve routing issues
-    };
-
     return (
       <div className="subject-details">
         <div className="subject-details-header">
@@ -618,13 +603,6 @@ const TeacherDashboard = () => {
             {subject} Performance Details
           </div>
           <div className="header-actions">
-            <button
-              className="answer-queries-btn"
-              onClick={handleAnswerQueries}
-            >
-              <i className="fas fa-question-circle"></i>
-              Answer Queries
-            </button>
             <button className="back-to-overview" onClick={onBack}>
               <i className="fas fa-arrow-left"></i>
               Back to Overview
@@ -1139,6 +1117,16 @@ const TeacherDashboard = () => {
     );
   };
 
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    title: "",
+    value: "",
+    status: "",
+    icon: "",
+  });
+
   return (
     <div className="teacher-dashboard">
       {/* Calendar Section */}
@@ -1624,74 +1612,189 @@ const TeacherDashboard = () => {
       </div>
 
       {/* Overview Section */}
-      <section className="overview-section">
+      <section className="overview-section dashboard-section">
         <div className="section-header">
           <div className="header-title">
-            <i className="fas fa-tasks"></i>
+            <i className="fas fa-chart-line"></i>
             <h2>Overview</h2>
           </div>
         </div>
 
         <div className="overview-header">
-          <div>Item</div>
-          <div>Value</div>
+          <div>Title</div>
+          <div>Progress</div>
           <div>Status</div>
           <div>Actions</div>
         </div>
 
-        {overviewItems.length > 0 ? (
-          overviewItems.map((item) => (
-            <div key={item.id} className="overview-row">
-              <div className="overview-title">
-                <i
-                  className={`fas fa-${
-                    item.type === "classes"
-                      ? "chalkboard-teacher"
-                      : item.type === "assignments"
-                      ? "book"
-                      : item.type === "attendance"
-                      ? "user-check"
-                      : item.type === "events"
-                      ? "calendar-check"
-                      : item.type === "performance"
-                      ? "chart-line"
-                      : "bullhorn"
-                  } mr-2`}
-                ></i>
-                {item.title}
-              </div>
-
-              <div className="overview-value">{item.value}</div>
-
-              <div
-                className={`overview-status ${item.status}`}
-                onClick={() => handleStatusChange(item.id)}
-                style={{ cursor: "pointer" }}
+        {overviewItems.map((item) => (
+          <div key={item.id} className="overview-row">
+            <div className="overview-title">
+              <i className={`fas ${item.icon}`}></i>
+              {item.title}
+            </div>
+            <div className="overview-value">{item.value}</div>
+            <div
+              className={`overview-status ${item.status}`}
+              onClick={() => handleStatusChange(item.id)}
+              style={{
+                cursor: "pointer",
+                backgroundColor: statusTypes[item.status]?.color,
+              }}
+            >
+              {statusTypes[item.status]?.label || item.status}
+            </div>
+            <div className="overview-action">
+              <button
+                className="action-btn view"
+                onClick={() => handleView(item.id)}
               >
-                {item.status.replace("-", " ")}
-              </div>
+                <i className="fas fa-eye"></i>
+                View
+              </button>
+              <button
+                className="action-btn edit"
+                onClick={() => handleEdit(item.id)}
+              >
+                <i className="fas fa-edit"></i>
+                Edit
+              </button>
+            </div>
+          </div>
+        ))}
 
-              <div className="overview-action">
+        {/* View Modal */}
+        {showViewModal && selectedItem && (
+          <div className="modal-overlay">
+            <div className="view-modal">
+              <div className="modal-header">
+                <h3>View Details</h3>
                 <button
-                  className="action-btn view"
-                  onClick={() => handleViewItem(item.id)}
-                  title={item.description}
+                  className="close-modal"
+                  onClick={() => setShowViewModal(false)}
                 >
-                  <i className="fas fa-eye"></i>
-                  Details
+                  <i className="fas fa-times"></i>
                 </button>
-                <button
-                  className="action-btn edit"
-                  onClick={() => handleEditItem(item.id)}
-                >
-                  <i className="fas fa-edit"></i>
-                  Update
-                </button>
+              </div>
+              <div className="modal-content">
+                <div className="detail-item">
+                  <span className="detail-label">Title:</span>
+                  <span className="detail-value">
+                    <i className={`fas ${selectedItem.icon}`}></i>
+                    {selectedItem.title}
+                  </span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Progress:</span>
+                  <span className="detail-value">{selectedItem.value}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Status:</span>
+                  <span
+                    className="detail-value status-badge"
+                    style={{
+                      backgroundColor: statusTypes[selectedItem.status]?.color,
+                    }}
+                  >
+                    {statusTypes[selectedItem.status]?.label}
+                  </span>
+                </div>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="overview-empty">No items available</div>
+          </div>
+        )}
+
+        {/* Edit Modal */}
+        {showEditModal && selectedItem && (
+          <div className="modal-overlay">
+            <div className="edit-modal">
+              <div className="modal-header">
+                <h3>Edit Item</h3>
+                <button
+                  className="close-modal"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+              <form onSubmit={handleEditSubmit} className="edit-form">
+                <div className="form-group">
+                  <label>Title:</label>
+                  <input
+                    type="text"
+                    value={editFormData.title}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        title: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Progress:</label>
+                  <input
+                    type="text"
+                    value={editFormData.value}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        value: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Status:</label>
+                  <select
+                    value={editFormData.status}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        status: e.target.value,
+                      })
+                    }
+                    required
+                  >
+                    {Object.entries(statusTypes).map(([value, { label }]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Icon:</label>
+                  <select
+                    value={editFormData.icon}
+                    onChange={(e) =>
+                      setEditFormData({ ...editFormData, icon: e.target.value })
+                    }
+                    required
+                  >
+                    <option value="fa-calculator">Calculator</option>
+                    <option value="fa-flask">Flask</option>
+                    <option value="fa-book">Book</option>
+                    <option value="fa-palette">Palette</option>
+                  </select>
+                </div>
+                <div className="form-actions">
+                  <button type="submit" className="save-btn">
+                    <i className="fas fa-save"></i> Save Changes
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    <i className="fas fa-times"></i> Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         )}
       </section>
 
