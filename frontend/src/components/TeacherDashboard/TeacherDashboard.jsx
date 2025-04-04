@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./TeacherDashboard.css";
-import { useNavigate } from "react-router-dom";
 
 const TeacherDashboard = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -519,7 +518,6 @@ const TeacherDashboard = () => {
   const SubjectDetails = ({ subject, data, onBack }) => {
     const [showTopPerformers, setShowTopPerformers] = useState(false);
     const [showNeedsAttention, setShowNeedsAttention] = useState(false);
-    const navigate = useNavigate();
 
     const studentData = {
       Mathematics: {
@@ -595,11 +593,11 @@ const TeacherDashboard = () => {
     };
 
     const handleAnswerQueries = () => {
-      try {
-        navigate("/teacher/queries");
-      } catch (error) {
-        window.location.href = "/teacher/queries";
-      }
+      // Set window.location.href directly to the full URL
+      const baseUrl = window.location.origin;
+      // For hash router, we need to use the hash format
+      window.location.href = `${baseUrl}/#/teacher-queries`;
+      // This forces a complete page reload and should resolve routing issues
     };
 
     return (

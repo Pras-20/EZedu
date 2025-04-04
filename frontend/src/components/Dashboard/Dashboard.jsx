@@ -264,6 +264,15 @@ const Dashboard = () => {
     setAssignments(assignments.filter((a) => a.id !== id));
   };
 
+  // Function to navigate to TeacherQueries page
+  const handleAnswerQueriesClick = () => {
+    // Set window.location.href directly to the full URL
+    const baseUrl = window.location.origin;
+    // For hash router, we need to use the hash format
+    window.location.href = `${baseUrl}/#/teacher-queries`;
+    // This forces a complete page reload and should resolve routing issues
+  };
+
   return (
     <main className="dashboard">
       <header className="dashboard-header">
@@ -292,7 +301,7 @@ const Dashboard = () => {
             </div>
             <span>Mark Attendance</span>
           </button>
-          <button className="action-btn">
+          <button className="action-btn" onClick={handleAnswerQueriesClick}>
             <div className="circle-icon">
               <i className="fas fa-envelope"></i>
             </div>
