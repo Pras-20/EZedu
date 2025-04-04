@@ -6,55 +6,51 @@ const TeacherDashboard = () => {
   const [scheduleItems, setScheduleItems] = useState([
     {
       id: 1,
-      class: "Student attendance",
-      time: "Today's Classes",
+      class: "Check Assignments",
+      time: "9:00 AM",
       status: "in-progress",
       completed: false,
-      description:
-        "Take attendance for all classes and update the records in the system.",
+      description: "Grade and provide feedback on pending student submissions.",
     },
     {
       id: 2,
-      class: "Lesson plans",
-      time: "Upcoming",
-      status: "in-progress",
+      class: "Upcoming Classes",
+      time: "10:30 AM",
+      status: "not-started",
       completed: false,
-      description: "Prepare and review lesson plans for upcoming classes.",
+      description: "Review lesson plans for today's scheduled classes.",
     },
     {
       id: 3,
-      class: "Effective Techniques",
-      time: "Tomorrow's",
-      status: "in-progress",
+      class: "Student Attendance",
+      time: "11:00 AM",
+      status: "not-started",
       completed: false,
-      description:
-        "Research and implement new teaching techniques for better student engagement.",
+      description: "Mark attendance for today's sessions.",
     },
     {
       id: 4,
-      class: "Parent-Teacher",
-      time: "13/01/2025",
-      status: "in-progress",
+      class: "Schedule Reminders",
+      time: "1:00 PM",
+      status: "not-started",
       completed: false,
-      description:
-        "Meeting with parents to discuss student progress and address concerns.",
+      description: "Notify students about upcoming tests or deadlines.",
     },
     {
       id: 5,
-      class: "Online Exam",
-      time: "25/01/2025",
-      status: "completed",
-      completed: true,
-      description: "Conduct online examination for end-of-term assessment.",
+      class: "Parent Communication",
+      time: "2:30 PM",
+      status: "not-started",
+      completed: false,
+      description: "Respond to any messages from parents or students.",
     },
     {
       id: 6,
-      class: "Engage students",
-      time: "27/01/2025",
-      status: "completed",
-      completed: true,
-      description:
-        "Plan and implement interactive activities to boost student participation.",
+      class: "Review Reports",
+      time: "4:00 PM",
+      status: "not-started",
+      completed: false,
+      description: "Analyze student performance trends.",
     },
   ]);
 
@@ -392,6 +388,95 @@ const TeacherDashboard = () => {
 
   const handleStatClick = (statKey) => {
     setSelectedStat(selectedStat === statKey ? null : statKey);
+  };
+
+  const [overviewItems, setOverviewItems] = useState([
+    {
+      id: 1,
+      title: "Total Classes Conducted",
+      status: "completed",
+      date: new Date().toISOString().split("T")[0],
+      type: "classes",
+      description: "15 classes conducted this month",
+      value: "15",
+    },
+    {
+      id: 2,
+      title: "Pending Assignments",
+      status: "pending",
+      date: new Date().toISOString().split("T")[0],
+      type: "assignments",
+      description: "12 assignments need review",
+      value: "12",
+    },
+    {
+      id: 3,
+      title: "Student Attendance Rate",
+      status: "in-review",
+      date: new Date().toISOString().split("T")[0],
+      type: "attendance",
+      description: "Current attendance rate at 92%",
+      value: "92%",
+    },
+    {
+      id: 4,
+      title: "Upcoming Events",
+      status: "pending",
+      date: new Date(new Date().setDate(new Date().getDate() + 2))
+        .toISOString()
+        .split("T")[0],
+      type: "events",
+      description: "Parent-Teacher Meeting on Friday",
+      value: "Friday",
+    },
+    {
+      id: 5,
+      title: "Performance Insights",
+      status: "in-review",
+      date: new Date().toISOString().split("T")[0],
+      type: "performance",
+      description: "5 students need extra attention in Math",
+      value: "5",
+    },
+    {
+      id: 6,
+      title: "Announcements",
+      status: "pending",
+      date: new Date(new Date().setDate(new Date().getDate() + 2))
+        .toISOString()
+        .split("T")[0],
+      type: "announcement",
+      description: "School trip registrations close in 2 days",
+      value: "2 days",
+    },
+  ]);
+
+  const handleStatusChange = (id) => {
+    setOverviewItems((items) =>
+      items.map((item) => {
+        if (item.id === id) {
+          const statusMap = {
+            pending: "in-review",
+            "in-review": "completed",
+            completed: "pending",
+          };
+          return { ...item, status: statusMap[item.status] };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handleViewItem = (id) => {
+    const item = overviewItems.find((item) => item.id === id);
+    alert(`Viewing details for: ${item.title}`);
+    // You can implement a modal or navigation here
+  };
+
+  const handleEditItem = (id) => {
+    const item = overviewItems.find((item) => item.id === id);
+    alert(`Editing: ${item.title}`);
+    // You can implement an edit modal here
   };
 
   return (
@@ -879,72 +964,76 @@ const TeacherDashboard = () => {
       </div>
 
       {/* Overview Section */}
-      <div className="dashboard-section overview-section">
+      <section className="overview-section">
         <div className="section-header">
+          <div className="header-title">
+            <i className="fas fa-tasks"></i>
           <h2>Overview</h2>
-          <span className="overview-icon">
-            <i className="fas fa-clipboard-list"></i>
-          </span>
+          </div>
         </div>
-        <div className="overview-table">
+
           <div className="overview-header">
-            <div>Tasks</div>
-            <div>Due dates</div>
+          <div>Item</div>
+          <div>Value</div>
             <div>Status</div>
-            <div>Action</div>
+          <div>Actions</div>
           </div>
-          <div className="overview-row">
-            <div>Test Planning</div>
-            <div>8:00pm</div>
-            <div>
-              <span className="status-badge in-progress">In progress</span>
+
+        {overviewItems.length > 0 ? (
+          overviewItems.map((item) => (
+            <div key={item.id} className="overview-row">
+              <div className="overview-title">
+                <i
+                  className={`fas fa-${
+                    item.type === "classes"
+                      ? "chalkboard-teacher"
+                      : item.type === "assignments"
+                      ? "book"
+                      : item.type === "attendance"
+                      ? "user-check"
+                      : item.type === "events"
+                      ? "calendar-check"
+                      : item.type === "performance"
+                      ? "chart-line"
+                      : "bullhorn"
+                  } mr-2`}
+                ></i>
+                {item.title}
             </div>
-            <div>
-              <button className="submit-btn">Submit</button>
+
+              <div className="overview-value">{item.value}</div>
+
+              <div
+                className={`overview-status ${item.status}`}
+                onClick={() => handleStatusChange(item.id)}
+                style={{ cursor: "pointer" }}
+              >
+                {item.status.replace("-", " ")}
             </div>
+
+              <div className="overview-action">
+                <button
+                  className="action-btn view"
+                  onClick={() => handleViewItem(item.id)}
+                  title={item.description}
+                >
+                  <i className="fas fa-eye"></i>
+                  Details
+                </button>
+                <button
+                  className="action-btn edit"
+                  onClick={() => handleEditItem(item.id)}
+                >
+                  <i className="fas fa-edit"></i>
+                  Update
+                </button>
           </div>
-          <div className="overview-row">
-            <div>Lesson Plans</div>
-            <div>11:55pm</div>
-            <div>
-              <span className="status-badge in-progress">In progress</span>
             </div>
-            <div>
-              <button className="submit-btn">Submit</button>
-            </div>
-          </div>
-          <div className="overview-row">
-            <div>Effective Techniques</div>
-            <div>1:00am</div>
-            <div>
-              <span className="status-badge in-progress">In progress</span>
-            </div>
-            <div>
-              <button className="submit-btn">Submit</button>
-            </div>
-          </div>
-          <div className="overview-row">
-            <div>Parent-Teacher</div>
-            <div>13/01/2025</div>
-            <div>
-              <span className="status-badge in-progress">In progress</span>
-            </div>
-            <div>
-              <button className="submit-btn">Submit</button>
-            </div>
-          </div>
-          <div className="overview-row">
-            <div>Digital Learning</div>
-            <div>25/01/2025</div>
-            <div>
-              <span className="status-badge not-started">Not started</span>
-            </div>
-            <div>
-              <button className="submit-btn">Submit</button>
-            </div>
-          </div>
-        </div>
-      </div>
+          ))
+        ) : (
+          <div className="overview-empty">No items available</div>
+        )}
+      </section>
 
       {/* Student Progress Section */}
       <div className="dashboard-section progress-section">
