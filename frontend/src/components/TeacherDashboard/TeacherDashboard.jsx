@@ -181,27 +181,19 @@ const TeacherDashboard = () => {
   };
 
   const handlePrevMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
 
   const handlePrevYear = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear() - 1, currentDate.getMonth()));
   };
 
   const handleNextYear = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear() + 1, currentDate.getMonth()));
   };
 
   const toggleTaskCompletion = (id) => {
@@ -1158,15 +1150,15 @@ const TeacherDashboard = () => {
             <i className="fas fa-calendar-alt"></i>
           </span>
           <div className="calendar-nav">
-            <div className="calendar-nav-year">
-              <button onClick={handlePrevYear}>&lt;&lt;</button>
-              <span>{currentDate.getFullYear()}</span>
-              <button onClick={handleNextYear}>&gt;&gt;</button>
-            </div>
-            <div className="calendar-nav-month">
-              <button onClick={handlePrevMonth}>&lt;</button>
+            <div className="month-nav">
+              <button onClick={handlePrevMonth}>&#x25B2;</button>
               <span>{months[currentDate.getMonth()]}</span>
-              <button onClick={handleNextMonth}>&gt;</button>
+              <button onClick={handleNextMonth}>&#x25BC;</button>
+            </div>
+            <div className="year-nav">
+              <button onClick={handlePrevYear}>&#x25B2;</button>
+              <span>{currentDate.getFullYear()}</span>
+              <button onClick={handleNextYear}>&#x25BC;</button>
             </div>
           </div>
         </div>

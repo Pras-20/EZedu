@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
+import { useEffect } from "react";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -12,12 +13,31 @@ const Sidebar = () => {
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
-    // Update main content margin
-    document.documentElement.style.setProperty(
-      "--sidebar-width",
-      !isCollapsed ? "80px" : "250px"
-    );
+  
+    const newSidebarWidth = !isCollapsed ? "80px" : "250px";
+    const newCardMarginLeft = !isCollapsed ? "-100px" : "-250px";
+  
+    document.documentElement.style.setProperty("--sidebar-width", newSidebarWidth);
+    document.documentElement.style.setProperty("--card-margin-left", newCardMarginLeft);
   };
+
+// inside Sidebar component
+useEffect(() => {
+  const initialSidebarWidth = isCollapsed ? "80px" : "250px";
+  const initialCardMarginLeft = isCollapsed ? "-100px" : "-250px";
+
+  document.documentElement.style.setProperty("--sidebar-width", initialSidebarWidth);
+  document.documentElement.style.setProperty("--card-margin-left", initialCardMarginLeft);
+}, [isCollapsed]);
+
+// inside Sidebar component
+useEffect(() => {
+  const initialSidebarWidth = isCollapsed ? "80px" : "250px";
+  const initialCardMarginLeft = isCollapsed ? "-100px" : "-250px";
+
+  document.documentElement.style.setProperty("--sidebar-width", initialSidebarWidth);
+  document.documentElement.style.setProperty("--card-margin-left", initialCardMarginLeft);
+}, [isCollapsed]);
 
   return (
     <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
