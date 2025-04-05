@@ -35,6 +35,9 @@ const Dashboard = () => {
     useState(null);
   const [attendanceStats, setAttendanceStats] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
+  const [isReminderModalOpen, setReminderModalOpen] = useState(false);
+  const [reminderMessage, setReminderMessage] = useState("");
+  const [reminderDate, setReminderDate] = useState("");
 
   const students = useMemo(
     () => [
@@ -347,6 +350,22 @@ const Dashboard = () => {
   const handleViewAllAttendance = () => {
     setIsViewAllAttendanceOpen(true);
     setFilteredStudents(students);
+  };
+
+  const handleAnswerQueriesClick = () => {
+    const baseUrl = window.location.origin;
+    window.location.href = `${baseUrl}/#/teacher-queries`;
+  };
+
+  const handleSetReminderClick = () => {
+    setReminderModalOpen(true);
+  };
+
+  const handleSaveReminder = () => {
+    console.log("Reminder set:", { message: reminderMessage, date: reminderDate });
+    setReminderModalOpen(false);
+    setReminderMessage("");
+    setReminderDate("");
   };
 
   return (
@@ -1088,6 +1107,36 @@ const Dashboard = () => {
                 </span>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {isReminderModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-btn" onClick={() => setReminderModalOpen(false)}>
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Set Reminder</h2>
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="Reminder Message"
+                value={reminderMessage}
+                onChange={(e) => setReminderMessage(e.target.value)}
+              />
+              <i className="fas fa-clock"></i>
+            </div>
+            <div className="filter-section">
+              <label>Select Date and Time:</label>
+              <input
+                type="datetime-local"
+                className="date-time-input"
+                value={reminderDate}
+                onChange={(e) => setReminderDate(e.target.value)}
+              />
+            </div>
+            <button className="save-btn reminder-save-btn" onClick={handleSaveReminder}>Save Reminder</button>
           </div>
         </div>
       )}
