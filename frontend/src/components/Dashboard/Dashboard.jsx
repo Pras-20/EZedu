@@ -730,24 +730,44 @@ const Dashboard = () => {
           </section>
 
           <section className="materials-section">
-            <h2>Educational Materials</h2>
-            <div className="materials-grid">
-              <button className="material-btn">
+            <div className="card-content">
+              <div className="card-icon">
                 <i className="fas fa-book"></i>
+              </div>
+              <div className="card-text">
+                <h3>Educational Materials</h3>
+                <p>Access learning resources easily!</p>
+              </div>
+            </div>
+            <div className="materials-grid">
+              <div>
+                <button className="material-btn">
+                  <i className="fas fa-book"></i>
+                  <span>Study</span>
+                </button>
                 <span>Study</span>
-              </button>
-              <button className="material-btn">
-                <i className="fas fa-folder"></i>
+              </div>
+              <div>
+                <button className="material-btn">
+                  <i className="fas fa-folder"></i>
+                  <span>Resources</span>
+                </button>
                 <span>Resources</span>
-              </button>
-              <button className="material-btn">
-                <i className="fas fa-pen"></i>
+              </div>
+              <div>
+                <button className="material-btn">
+                  <i className="fas fa-pen"></i>
+                  <span>Tests</span>
+                </button>
                 <span>Tests</span>
-              </button>
-              <button className="material-btn">
-                <i className="fas fa-check-circle"></i>
+              </div>
+              <div>
+                <button className="material-btn">
+                  <i className="fas fa-check-circle"></i>
+                  <span>Quizzes</span>
+                </button>
                 <span>Quizzes</span>
-              </button>
+              </div>
             </div>
           </section>
         </div>
