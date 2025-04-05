@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./Dashboard.css";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
@@ -21,6 +21,20 @@ const Dashboard = () => {
   const [isAssignmentModalOpen, setAssignmentModalOpen] = useState(false);
   const [assignments, setAssignments] = useState([]);
   const [currentAssignment, setCurrentAssignment] = useState(null);
+  const [isDailyTasksModalOpen, setDailyTasksModalOpen] = useState(false);
+  const [isViewAllAttendanceOpen, setIsViewAllAttendanceOpen] = useState(false);
+  const [dailyTasks, setDailyTasks] = useState([
+    { id: 1, title: "Take attendance for Class 10A", completed: false },
+    { id: 2, title: "Review homework submissions", completed: false },
+    { id: 3, title: "Prepare lesson plan for tomorrow", completed: false },
+    { id: 4, title: "Grade Math quizzes", completed: true },
+    { id: 5, title: "Parent-teacher meeting at 2 PM", completed: false },
+    { id: 6, title: "Submit weekly progress report", completed: false },
+  ]);
+  const [selectedAttendanceStudent, setSelectedAttendanceStudent] =
+    useState(null);
+  const [attendanceStats, setAttendanceStats] = useState({});
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const students = useMemo(
     () => [
@@ -59,24 +73,6 @@ const Dashboard = () => {
         section: "A",
         rollNo: "004",
         attendance: "96%",
-      },
-      {
-        id: "05",
-        name: "David Brown",
-        gender: "Male",
-        grade: "11",
-        section: "B",
-        rollNo: "005",
-        attendance: "89%",
-      },
-      {
-        id: "06",
-        name: "Lisa Anderson",
-        gender: "Female",
-        grade: "11",
-        section: "A",
-        rollNo: "006",
-        attendance: "94%",
       },
     ],
     []
@@ -117,6 +113,57 @@ const Dashboard = () => {
   useEffect(() => {
     filterStudents();
   }, [filterStudents]);
+
+  useEffect(() => {
+    // Generate sample attendance data for demonstration
+    const generateAttendanceStats = () => {
+      const stats = {};
+      students.forEach((student) => {
+        const subjects = [
+          "Mathematics",
+          "Physics",
+          "Chemistry",
+          "Biology",
+          "English",
+        ];
+        const currentDate = new Date();
+        const attendanceData = {
+          subjects: subjects.reduce((acc, subject) => {
+            acc[subject] = {
+              present: Math.floor(Math.random() * 40) + 55, // 55-95 present days
+              total: 100,
+              dates: [],
+            };
+            return acc;
+          }, {}),
+          recentAttendance: [],
+        };
+
+        // Generate last 30 days attendance
+        for (let i = 0; i < 30; i++) {
+          const date = new Date(currentDate);
+          date.setDate(date.getDate() - i);
+          if (date.getDay() !== 0 && date.getDay() !== 6) {
+            // Exclude weekends
+            const status = Math.random() > 0.15 ? "Present" : "Absent";
+            attendanceData.recentAttendance.push({
+              date: date.toISOString().split("T")[0],
+              status,
+              subjects: subjects.reduce((acc, subject) => {
+                acc[subject] = Math.random() > 0.1 ? "Present" : "Absent";
+                return acc;
+              }, {}),
+            });
+          }
+        }
+
+        stats[student.id] = attendanceData;
+      });
+      setAttendanceStats(stats);
+    };
+
+    generateAttendanceStats();
+  }, [students]);
 
   const handleProfileClick = () => {
     // Example functionality: Open profile menu or redirect
@@ -265,13 +312,41 @@ const Dashboard = () => {
     setAssignments(assignments.filter((a) => a.id !== id));
   };
 
-  // Function to navigate to TeacherQueries page
-  const handleAnswerQueriesClick = () => {
-    // Set window.location.href directly to the full URL
-    const baseUrl = window.location.origin;
-    // For hash router, we need to use the hash format
-    window.location.href = `${baseUrl}/#/teacher-queries`;
-    // This forces a complete page reload and should resolve routing issues
+  const handleDailyTasksClick = () => {
+    setDailyTasksModalOpen(true);
+  };
+
+  const toggleTaskCompletion = (taskId) => {
+    setDailyTasks(
+      dailyTasks.map((task) =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
+  const addNewTask = (taskTitle) => {
+    if (!taskTitle.trim()) return;
+
+    const newTask = {
+      id: Date.now(),
+      title: taskTitle,
+      completed: false,
+    };
+
+    setDailyTasks([...dailyTasks, newTask]);
+  };
+
+  const deleteTask = (taskId) => {
+    setDailyTasks(dailyTasks.filter((task) => task.id !== taskId));
+  };
+
+  const handleAttendanceItemClick = (student) => {
+    setSelectedAttendanceStudent(student);
+  };
+
+  const handleViewAllAttendance = () => {
+    setIsViewAllAttendanceOpen(true);
+    setFilteredStudents(students);
   };
 
   return (
@@ -310,17 +385,17 @@ const Dashboard = () => {
               <span>Answer Queries</span>
             </button>
           </Link>
+          <button className="action-btn" onClick={handleDailyTasksClick}>
+            <div className="circle-icon">
+              <i className="fas fa-tasks"></i>
+            </div>
+            <span>Daily Tasks</span>
+          </button>
           <button className="action-btn" onClick={handleGenerateReportClick}>
             <div className="circle-icon">
               <i className="fas fa-chart-line"></i>
             </div>
             <span>Generate Report</span>
-          </button>
-          <button className="action-btn">
-            <div className="circle-icon">
-              <i className="fas fa-chevron-right"></i>
-            </div>
-            <span>More Options</span>
           </button>
         </div>
       </section>
@@ -630,14 +705,20 @@ const Dashboard = () => {
           <section className="daily-tasks-card">
             <h2>Daily tasks</h2>
             <p>Manage your daily tasks efficiently!</p>
-            <button className="add-btn">Add</button>
+            <button className="add-btn" onClick={handleDailyTasksClick}>
+              Add
+            </button>
           </section>
 
           <section className="attendance-section">
             <h2>Manage Attendance</h2>
             <div className="attendance-list">
               {students.map((student) => (
-                <div key={student.id} className="attendance-item">
+                <div
+                  key={student.id}
+                  className="attendance-item"
+                  onClick={() => handleAttendanceItemClick(student)}
+                >
                   <div className="student-info">
                     <span className="student-id">{student.id}</span>
                     <div className="student-avatar">
@@ -650,7 +731,12 @@ const Dashboard = () => {
                   </span>
                 </div>
               ))}
-              <button className="view-all-btn">View All</button>
+              <button
+                className="view-all-btn"
+                onClick={handleViewAllAttendance}
+              >
+                View All
+              </button>
             </div>
           </section>
         </aside>
@@ -692,6 +778,316 @@ const Dashboard = () => {
                 Delete
               </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {isDailyTasksModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content daily-tasks-modal">
+            <button
+              className="close-btn"
+              onClick={() => setDailyTasksModalOpen(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Daily Tasks</h2>
+
+            <div className="add-task-form">
+              <input
+                type="text"
+                placeholder="Add a new task..."
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    addNewTask(e.target.value);
+                    e.target.value = "";
+                  }
+                }}
+              />
+              <div className="task-tip">Press Enter to add a new task</div>
+            </div>
+
+            <div className="tasks-list">
+              {dailyTasks.map((task) => (
+                <div
+                  key={task.id}
+                  className={`task-item ${task.completed ? "completed" : ""}`}
+                >
+                  <div
+                    className="task-checkbox"
+                    onClick={() => toggleTaskCompletion(task.id)}
+                  >
+                    {task.completed && <i className="fas fa-check"></i>}
+                  </div>
+                  <span className="task-title">{task.title}</span>
+                  <button
+                    className="delete-task"
+                    onClick={() => deleteTask(task.id)}
+                  >
+                    <i className="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="tasks-summary">
+              <span>
+                {dailyTasks.filter((task) => task.completed).length} of{" "}
+                {dailyTasks.length} tasks completed
+              </span>
+              <div className="progress-bar">
+                <div
+                  className="progress"
+                  style={{
+                    width: `${
+                      (dailyTasks.filter((task) => task.completed).length /
+                        dailyTasks.length) *
+                      100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedAttendanceStudent &&
+        attendanceStats[selectedAttendanceStudent.id] && (
+          <div className="modal-overlay">
+            <div className="modal-content attendance-details-modal">
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setSelectedAttendanceStudent(null);
+                  setSelectedDate(null);
+                }}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+              <h2>{selectedAttendanceStudent.name}'s Attendance</h2>
+
+              <div className="attendance-overview">
+                <div className="overall-attendance">
+                  <h3>Overall Attendance</h3>
+                  <div className="attendance-percentage-circle">
+                    <span className="percentage">
+                      {selectedAttendanceStudent.attendance}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="subject-wise-attendance">
+                  <h3>Subject-wise Attendance</h3>
+                  {Object.entries(
+                    attendanceStats[selectedAttendanceStudent.id].subjects
+                  ).map(([subject, stats]) => (
+                    <div key={subject} className="subject-attendance">
+                      <div className="subject-header">
+                        <span className="subject-name">{subject}</span>
+                        <span className="subject-percentage">
+                          {Math.round((stats.present / stats.total) * 100)}%
+                        </span>
+                      </div>
+                      <div className="progress-bar">
+                        <div
+                          className="progress"
+                          style={{
+                            width: `${(stats.present / stats.total) * 100}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="attendance-calendar">
+                  <h3>Recent Attendance</h3>
+                  <div className="calendar-grid">
+                    {attendanceStats[
+                      selectedAttendanceStudent.id
+                    ].recentAttendance
+                      .slice(0, 10)
+                      .map((day) => (
+                        <div
+                          key={day.date}
+                          className={`calendar-day ${
+                            selectedDate === day.date ? "selected" : ""
+                          } ${day.status.toLowerCase()}`}
+                          onClick={() =>
+                            setSelectedDate(
+                              selectedDate === day.date ? null : day.date
+                            )
+                          }
+                        >
+                          <div className="date">
+                            {new Date(day.date).toLocaleDateString("en-US", {
+                              day: "numeric",
+                              month: "short",
+                            })}
+                          </div>
+                          {selectedDate === day.date && (
+                            <div className="day-details">
+                              <div className="status">{day.status}</div>
+                              <div className="subject-details">
+                                {Object.entries(day.subjects).map(
+                                  ([subject, status]) => (
+                                    <div key={subject} className="subject-row">
+                                      <span className="subject-name">
+                                        {subject}
+                                      </span>
+                                      <span
+                                        className={`status ${status.toLowerCase()}`}
+                                      >
+                                        {status}
+                                      </span>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                </div>
+
+                <div className="attendance-stats">
+                  <div className="stat-box">
+                    <h4>Present Days</h4>
+                    <span className="stat-value">
+                      {
+                        Object.values(
+                          attendanceStats[selectedAttendanceStudent.id].subjects
+                        )[0].present
+                      }
+                    </span>
+                  </div>
+                  <div className="stat-box">
+                    <h4>Absent Days</h4>
+                    <span className="stat-value">
+                      {Object.values(
+                        attendanceStats[selectedAttendanceStudent.id].subjects
+                      )[0].total -
+                        Object.values(
+                          attendanceStats[selectedAttendanceStudent.id].subjects
+                        )[0].present}
+                    </span>
+                  </div>
+                  <div className="stat-box">
+                    <h4>Total Days</h4>
+                    <span className="stat-value">
+                      {
+                        Object.values(
+                          attendanceStats[selectedAttendanceStudent.id].subjects
+                        )[0].total
+                      }
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+      {isViewAllAttendanceOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content view-all-attendance-modal">
+            <button
+              className="close-btn"
+              onClick={() => setIsViewAllAttendanceOpen(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>All Students Attendance</h2>
+
+            <div className="search-filter-section">
+              <div className="search-bar">
+                <input
+                  type="text"
+                  placeholder="Search by name or ID..."
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <i className="fas fa-search"></i>
+              </div>
+              <div className="filters">
+                <select
+                  value={selectedGrade}
+                  onChange={(e) => setSelectedGrade(e.target.value)}
+                >
+                  <option value="">All Grades</option>
+                  <option value="9">Grade 9</option>
+                  <option value="10">Grade 10</option>
+                  <option value="11">Grade 11</option>
+                </select>
+                <select
+                  value={selectedGender}
+                  onChange={(e) => setSelectedGender(e.target.value)}
+                >
+                  <option value="">All Genders</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="all-students-list">
+              <div className="list-header">
+                <span>ID</span>
+                <span>Name</span>
+                <span>Grade</span>
+                <span>Section</span>
+                <span>Attendance</span>
+                <span>Details</span>
+              </div>
+              <div className="list-body">
+                {filteredStudents.length > 0 ? (
+                  filteredStudents.map((student) => (
+                    <div key={student.id} className="student-row">
+                      <span>{student.id}</span>
+                      <span>{student.name}</span>
+                      <span>Grade {student.grade}</span>
+                      <span>Section {student.section}</span>
+                      <span className="attendance-cell">
+                        {student.attendance}
+                      </span>
+                      <button
+                        className="view-details-btn"
+                        onClick={() => {
+                          handleAttendanceItemClick(student);
+                          setIsViewAllAttendanceOpen(false);
+                        }}
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div className="no-results">No students found</div>
+                )}
+              </div>
+            </div>
+
+            <div className="attendance-summary">
+              <div className="summary-box">
+                <h4>Total Students</h4>
+                <span>{filteredStudents.length}</span>
+              </div>
+              <div className="summary-box">
+                <h4>Average Attendance</h4>
+                <span>
+                  {filteredStudents.length > 0
+                    ? `${Math.round(
+                        filteredStudents.reduce(
+                          (acc, student) =>
+                            acc + parseInt(student.attendance.replace("%", "")),
+                          0
+                        ) / filteredStudents.length
+                      )}%`
+                    : "N/A"}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       )}

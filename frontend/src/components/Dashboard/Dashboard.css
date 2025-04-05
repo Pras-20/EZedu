@@ -359,8 +359,8 @@
 .attendance-item {
   display: flex;
   align-items: center;
-  padding: 5px;
-  background-color: #f1f3f4;
+  padding: 12px;
+  background-color: white;
   border-radius: 8px;
   margin-bottom: 8px;
   transition: all 0.3s ease;
@@ -368,6 +368,7 @@
   position: relative;
   overflow: hidden;
   margin-top: 5px;
+  border: 1px solid transparent;
 }
 
 .student-info {
@@ -383,23 +384,26 @@
   min-width: 24px;
   margin-right: auto;
   margin-top: 25px;
+  transition: color 0.3s ease;
 }
 
 .student-avatar {
   width: 32px;
   height: 32px;
-  background-color: #dadce0;
+  background-color: #e8f0fe;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 12px;
   margin-top: -50px;
+  transition: all 0.3s ease;
 }
 
 .student-avatar i {
   font-size: 16px;
-  color: #5f6368;
+  color: #4285f4;
+  transition: color 0.3s ease;
 }
 
 .student-name {
@@ -407,12 +411,15 @@
   font-weight: 500;
   margin-top: 40px;
   flex: 1;
+  color: #202124;
+  transition: color 0.3s ease;
 }
 
 .attendance-percentage {
   color: #5f6368;
   font-size: 14px;
   margin-left: auto;
+  transition: color 0.3s ease;
 }
 
 .view-all-btn {
@@ -620,19 +627,20 @@
 }
 
 .attendance-item:hover {
-  background-color: #4285f4;
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(66, 133, 244, 0.2);
+  background-color: #e8f0fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(66, 133, 244, 0.2);
+  border-color: #4285f4;
 }
 
 .attendance-item:hover .student-id,
 .attendance-item:hover .student-name,
 .attendance-item:hover .attendance-percentage {
-  color: white;
+  color: #4285f4;
 }
 
 .attendance-item:hover .student-avatar {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #4285f4;
 }
 
 .attendance-item:hover .student-avatar i {
@@ -648,8 +656,8 @@
   bottom: 0;
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.3) 0%,
-    rgba(255, 255, 255, 0) 70%
+    rgba(66, 133, 244, 0.1) 0%,
+    rgba(66, 133, 244, 0) 70%
   );
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -1248,4 +1256,576 @@
 .attendance-modal .student-list {
   overflow-x: hidden; /* Prevent horizontal scrolling */
   max-width: 100%; /* Ensure it doesn't exceed modal width */
+}
+
+/* Daily Tasks Modal Styles */
+.daily-tasks-modal {
+  width: 500px;
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.daily-tasks-modal h2 {
+  margin-bottom: 1.5rem;
+  color: #202124;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.add-task-form {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.add-task-form input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.add-task-form input:focus {
+  outline: none;
+  border-color: #4285f4;
+}
+
+.task-tip {
+  position: absolute;
+  right: 8px;
+  bottom: -20px;
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.tasks-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin: 1rem -1rem;
+  padding: 0 1rem;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.task-item:hover {
+  background-color: #f1f3f4;
+}
+
+.task-item.completed .task-title {
+  color: #5f6368;
+  text-decoration: line-through;
+}
+
+.task-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #4285f4;
+  border-radius: 4px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.task-checkbox:hover {
+  background-color: rgba(66, 133, 244, 0.1);
+}
+
+.task-checkbox i {
+  color: #4285f4;
+  font-size: 14px;
+}
+
+.task-title {
+  flex-grow: 1;
+  font-size: 16px;
+  color: #202124;
+}
+
+.delete-task {
+  background: none;
+  border: none;
+  color: #dc3545;
+  padding: 8px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.task-item:hover .delete-task {
+  opacity: 1;
+}
+
+.delete-task:hover {
+  color: #c82333;
+}
+
+.tasks-summary {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.tasks-summary span {
+  display: block;
+  margin-bottom: 8px;
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #4285f4;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Scrollbar styles for tasks list */
+.tasks-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tasks-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Attendance Details Modal Styles */
+.attendance-details-modal {
+  width: 800px;
+  max-width: 90vw;
+  padding: 2rem;
+}
+
+.attendance-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.overall-attendance {
+  text-align: center;
+}
+
+.attendance-percentage-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #4285f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+}
+
+.attendance-percentage-circle .percentage {
+  color: white;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.subject-wise-attendance {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.subject-attendance {
+  margin-bottom: 1rem;
+}
+
+.subject-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.subject-name {
+  font-weight: 500;
+  color: #202124;
+}
+
+.subject-percentage {
+  color: #5f6368;
+}
+
+.attendance-calendar {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  position: relative;
+  overflow: visible;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.calendar-day {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-day .date {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #202124;
+}
+
+.calendar-day.present {
+  border-left: 3px solid #34a853;
+}
+
+.calendar-day.absent {
+  border-left: 3px solid #ea4335;
+}
+
+.calendar-day.selected {
+  background: #e8f0fe;
+  border: 2px solid #4285f4;
+}
+
+.day-details {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  z-index: 100;
+  text-align: left;
+  min-width: 250px;
+  border: 1px solid #e0e0e0;
+}
+
+.day-details::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid white;
+  z-index: 101;
+}
+
+.day-details::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid #e0e0e0;
+  z-index: 99;
+}
+
+.day-details .status {
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.subject-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.subject-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.subject-row:hover {
+  background-color: #f8f9fa;
+}
+
+.subject-row .subject-name {
+  color: #202124;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.subject-row .status {
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.subject-row .status.present {
+  background: #e6f4ea;
+  color: #34a853;
+}
+
+.subject-row .status.absent {
+  background: #fce8e6;
+  color: #ea4335;
+}
+
+/* Add styles for the last two items in each row */
+.calendar-grid > div:nth-last-child(-n + 2) .day-details {
+  left: auto;
+  right: 0;
+  transform: translateX(0);
+}
+
+.calendar-grid > div:nth-last-child(-n + 2) .day-details::before,
+.calendar-grid > div:nth-last-child(-n + 2) .day-details::after {
+  left: auto;
+  right: 20px;
+}
+
+/* Add styles for the first two items in each row */
+.calendar-grid > div:nth-child(5n + 1) .day-details,
+.calendar-grid > div:nth-child(5n + 2) .day-details {
+  left: 0;
+  transform: translateX(0);
+}
+
+.calendar-grid > div:nth-child(5n + 1) .day-details::before,
+.calendar-grid > div:nth-child(5n + 2) .day-details::after {
+  left: 20px;
+  transform: translateX(0);
+}
+
+/* Remove the old subject indicators styles */
+.subject-indicators {
+  display: none;
+}
+
+.subject-indicator {
+  display: none;
+}
+
+.attendance-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-box {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-box h4 {
+  color: #5f6368;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-box .stat-value {
+  font-size: 24px;
+  font-weight: 500;
+  color: #202124;
+}
+
+.attendance-details-modal h3 {
+  color: #202124;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+/* Make the attendance items in the sidebar clickable */
+.attendance-item {
+  cursor: pointer;
+}
+
+.attendance-item:hover {
+  background-color: #e8f0fe;
+}
+
+/* View All Attendance Modal Styles */
+.view-all-attendance-modal {
+  width: 900px;
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-filter-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-filter-section .search-bar {
+  flex: 1;
+  min-width: 250px;
+}
+
+.search-filter-section .filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.search-filter-section select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-width: 120px;
+}
+
+.all-students-list {
+  flex: 1;
+  overflow-y: auto;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 0 -1rem;
+}
+
+.list-header {
+  display: grid;
+  grid-template-columns: 0.5fr 1.5fr 1fr 1fr 1fr 1fr;
+  padding: 1rem;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.list-body {
+  padding: 0.5rem 1rem;
+}
+
+.student-row {
+  display: grid;
+  grid-template-columns: 0.5fr 1.5fr 1fr 1fr 1fr 1fr;
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.student-row:hover {
+  background-color: #fff;
+}
+
+.student-row:last-child {
+  border-bottom: none;
+}
+
+.attendance-cell {
+  color: #4285f4;
+  font-weight: 500;
+}
+
+.view-details-btn {
+  padding: 0.5rem 1rem;
+  background: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.view-details-btn:hover {
+  background: #3367d6;
+}
+
+.attendance-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.summary-box {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.summary-box h4 {
+  color: #5f6368;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.summary-box span {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #4285f4;
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #5f6368;
 }
