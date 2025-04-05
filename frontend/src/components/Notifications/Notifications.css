@@ -1,5 +1,6 @@
 .notifications {
   padding: 20px;
+  position: relative; /* Allow absolute positioning of child elements */
 }
 
 .notification-section {
@@ -10,12 +11,18 @@
   margin-bottom: 15px;
 }
 
+.notification-section ul {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
 .notification {
   padding: 10px;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
-  border-color:black;
-  margin-bottom: 5px;
+  border-color: black;
+  margin-bottom: 5px; /* Maintain spacing between notifications */
 }
 
 .notification.query {
@@ -78,16 +85,17 @@
 .save-settings-btn {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #4285f4; /* Button color */
-  color: white; /* Text color */
-  border: none; /* No border */
+  background-color: #ffffff; /* Button color */
+  color: #000000; /* Text color */
+  border: 1px solid #ccc;
   border-radius: 4px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor on hover */
   transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 .save-settings-btn:hover {
-  background-color: #357ae8; /* Darker shade on hover */
+  background-color: #357ae8;
+  color: #ffffff;
 }
 
 .button-group {
@@ -111,4 +119,73 @@
 
 .button-group button:hover {
   background-color: #e0e0e0; /* Background color on hover */
+}
+
+.notification-message {
+  padding: 10px 20px; /* Match the button's padding */
+  background-color: #dff0d8; /* Light green background */
+  color: #3c763d; /* Dark green text */
+  border: 1px solid #d6e9c6; /* Border color */
+  border-radius: 4px; /* Rounded corners */
+  margin: 0; /* Remove margin to keep it aligned */
+  display: inline-block; /* Make it behave like a button */
+  cursor: default; /* Change cursor to default */
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.filters label {
+  margin-right: 10px;
+}
+
+.filters select {
+  margin-right: 20px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.notification-settings-btn {
+  padding: 10px 20px; /* Adjust padding as needed */
+  background-color: #ffffff; /* Button color */
+  color: #000000; /* Text color */
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.notification-settings-btn:hover {
+  background-color: #357ae8; /* Darker shade on hover */
+  color: #ffffff;
+}
+
+.mark-as-read-btn {
+    padding: 10px 20px;
+    background-color: #4285f4; /* Button color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin-bottom: 20px; /* Space below the button */
+  }
+  
+  .mark-as-read-btn:hover {
+    background-color: #357ae8; /* Darker shade on hover */
+  }
+
+.settings-container {
+  display: flex;
+  align-items: center; /* Align items vertically centered */
+  justify-content: space-between; /* Space between message and button */
+  margin-top: 20px; /* Add space above the settings container */
+}
+
+.divider {
+  border: 0; /* Remove default border */
+  border-top: 1px solid #ccc; /* Add a top border for the divider */
+  margin: 20px 0; /* Space above and below the divider */
 }
