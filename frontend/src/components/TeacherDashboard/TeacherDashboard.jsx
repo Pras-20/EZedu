@@ -204,6 +204,11 @@ const TeacherDashboard = () => {
     );
   };
 
+  const handleProfileClick = () => {
+    // Navigate to the profile page
+    window.location.href = '/profile';
+  };
+
   const toggleTaskCompletion = (id) => {
     setScheduleItems(
       scheduleItems.map((item) => {
@@ -1148,7 +1153,14 @@ const TeacherDashboard = () => {
 
   return (
     <div className="teacher-dashboard">
-      {/* Calendar Section */}
+      <div className="dashboard-header">
+        <h1>Teacher Dashboard</h1>
+        <div className="profile-icon" onClick={handleProfileClick}>
+          <i className="fas fa-user-circle"></i>
+        </div>
+      </div>
+      
+      {/* Calendar Section - First Row, First Column */}
       <div className="dashboard-section calendar-section">
         <div className="calendar-header-container">
           <span className="calendar-icon">

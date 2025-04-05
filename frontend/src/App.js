@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TeacherDashboard from "./components/TeacherDashboard/TeacherDashboard";
 import TeacherQueries from './components/TeacherQueries/TeacherQueries';
+import Profile from './components/Profile/Profile';
 import "./App.css";
 
 const Layout = ({ children }) => (
@@ -38,6 +39,10 @@ const router = createBrowserRouter(
           <TeacherQueries />
         </Layout>
       ),
+    },
+    {
+      path: "/profile",
+      element: <Profile />,
     },
   ],
   {

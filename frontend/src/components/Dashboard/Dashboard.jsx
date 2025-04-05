@@ -12,7 +12,6 @@ const Dashboard = () => {
   const [selectedGrade, setSelectedGrade] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [isAttendanceModalOpen, setAttendanceModalOpen] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState("");
   const [attendance, setAttendance] = useState({});
   const [isReportModalOpen, setReportModalOpen] = useState(false);
   const [selectedReportStudent, setSelectedReportStudent] = useState(null);
@@ -40,6 +39,10 @@ const Dashboard = () => {
   const [repeatOption, setRepeatOption] = useState("none");
   const [priority, setPriority] = useState("normal");
   const [customMessage, setCustomMessage] = useState("");
+  const [isStudyModalOpen, setStudyModalOpen] = useState(false);
+  const [isResourcesModalOpen, setResourcesModalOpen] = useState(false);
+  const [isTestsModalOpen, setTestsModalOpen] = useState(false);
+  const [isQuizzesModalOpen, setQuizzesModalOpen] = useState(false);
 
   const students = useMemo(
     () => [
@@ -82,11 +85,6 @@ const Dashboard = () => {
     ],
     []
   );
-
-  const schedule = [
-    { period: "1st", grade: "10", section: "A" },
-    { period: "2nd", grade: "9", section: "B" },
-  ];
 
   const filterStudents = useCallback(() => {
     let filtered = [...students];
@@ -171,9 +169,8 @@ const Dashboard = () => {
   }, [students]);
 
   const handleProfileClick = () => {
-    // Example functionality: Open profile menu or redirect
-    console.log("Profile icon clicked");
-    // You can replace this with actual functionality, like opening a modal or redirecting
+    // Navigate to the profile page
+    window.location.href = '/profile';
   };
 
   const handleSearchClick = useCallback(() => {
@@ -395,6 +392,22 @@ const Dashboard = () => {
     setIsReminderModalOpen(false);
   };
 
+  const handleStudyClick = () => {
+    setStudyModalOpen(true);
+  };
+
+  const handleResourcesClick = () => {
+    setResourcesModalOpen(true);
+  };
+
+  const handleTestsClick = () => {
+    setTestsModalOpen(true);
+  };
+
+  const handleQuizzesClick = () => {
+    setQuizzesModalOpen(true);
+  };
+
   return (
     <main className="dashboard">
       <header className="dashboard-header">
@@ -403,10 +416,6 @@ const Dashboard = () => {
           <i className="fas fa-user-circle"></i>
         </div>
       </header>
-
-      <section className="schedule-section">
-        <h2>Schedule</h2>
-      </section>
 
       <section className="student-details">
         <h2>Student Details</h2>
@@ -550,67 +559,48 @@ const Dashboard = () => {
             </button>
             <h2>Mark Attendance</h2>
 
-            <div className="filter-section">
-              <label>Select Period:</label>
-              <select
-                value={selectedPeriod}
-                onChange={(e) => setSelectedPeriod(e.target.value)}
-              >
-                <option value="">Select a Period</option>
-                {schedule.map((item) => (
-                  <option key={item.period} value={item.period}>
-                    {item.period} - Grade {item.grade} Section {item.section}
-                  </option>
-                ))}
-              </select>
+            <div className="student-list">
+              <h3>Students</h3>
+              {students.map((student) => (
+                <div key={student.id} className="student-item">
+                  <div className="student-avatar">
+                    <i className="fas fa-user-circle"></i>
+                  </div>
+                  <div className="student-info">
+                    <strong>{student.name}</strong>
+                    <span>Roll No: {student.rollNo}</span>
+                  </div>
+                  <div className="attendance-buttons">
+                    <button
+                      className={`attendance-btn present ${
+                        attendance[student.id] === "Present" ? "active" : ""
+                      }`}
+                      onClick={() =>
+                        handleAttendanceChange(student.id, "Present")
+                      }
+                      type="button"
+                    >
+                      Present
+                    </button>
+                    <button
+                      className={`attendance-btn absent ${
+                        attendance[student.id] === "Absent" ? "active" : ""
+                      }`}
+                      onClick={() =>
+                        handleAttendanceChange(student.id, "Absent")
+                      }
+                      type="button"
+                    >
+                      Absent
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {selectedPeriod && (
-              <div className="student-list">
-                <h3>Students in {selectedPeriod}</h3>
-                {students.map((student) => (
-                  <div key={student.id} className="student-item">
-                    <div className="student-avatar">
-                      <i className="fas fa-user-circle"></i>
-                    </div>
-                    <div className="student-info">
-                      <strong>{student.name}</strong>
-                      <span>Roll No: {student.rollNo}</span>
-                    </div>
-                    <div className="attendance-buttons">
-                      <button
-                        className={`attendance-btn present ${
-                          attendance[student.id] === "Present" ? "active" : ""
-                        }`}
-                        onClick={() =>
-                          handleAttendanceChange(student.id, "Present")
-                        }
-                        type="button"
-                      >
-                        Present
-                      </button>
-                      <button
-                        className={`attendance-btn absent ${
-                          attendance[student.id] === "Absent" ? "active" : ""
-                        }`}
-                        onClick={() =>
-                          handleAttendanceChange(student.id, "Absent")
-                        }
-                        type="button"
-                      >
-                        Absent
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {selectedPeriod && (
-              <button className="download-btn" onClick={downloadAttendance}>
-                Download Attendance
-              </button>
-            )}
+            <button className="download-btn" onClick={downloadAttendance}>
+              Download Attendance
+            </button>
           </div>
         </div>
       )}
@@ -741,28 +731,28 @@ const Dashboard = () => {
             </div>
             <div className="materials-grid">
               <div>
-                <button className="material-btn">
+                <button className="material-btn" onClick={handleStudyClick}>
                   <i className="fas fa-book"></i>
                   <span>Study</span>
                 </button>
                 <span>Study</span>
               </div>
               <div>
-                <button className="material-btn">
+                <button className="material-btn" onClick={handleResourcesClick}>
                   <i className="fas fa-folder"></i>
                   <span>Resources</span>
                 </button>
                 <span>Resources</span>
               </div>
               <div>
-                <button className="material-btn">
+                <button className="material-btn" onClick={handleTestsClick}>
                   <i className="fas fa-pen"></i>
                   <span>Tests</span>
                 </button>
                 <span>Tests</span>
               </div>
               <div>
-                <button className="material-btn">
+                <button className="material-btn" onClick={handleQuizzesClick}>
                   <i className="fas fa-check-circle"></i>
                   <span>Quizzes</span>
                 </button>
@@ -853,70 +843,333 @@ const Dashboard = () => {
         </div>
       )}
 
-      {isDailyTasksModalOpen && (
+      {isStudyModalOpen && (
         <div className="modal-overlay">
-          <div className="modal-content daily-tasks-modal">
+          <div className="modal-content">
             <button
               className="close-btn"
-              onClick={() => setDailyTasksModalOpen(false)}
+              onClick={() => setStudyModalOpen(false)}
             >
               <i className="fas fa-times"></i>
             </button>
-            <h2>Daily Tasks</h2>
-
-            <div className="add-task-form">
-              <input
-                type="text"
-                placeholder="Add a new task..."
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    addNewTask(e.target.value);
-                    e.target.value = "";
-                  }
-                }}
-              />
-              <div className="task-tip">Press Enter to add a new task</div>
+            <h2>Study Materials</h2>
+            <div className="study-content">
+              <div className="study-section">
+                <h3>Recent Study Materials</h3>
+                <ul className="study-list">
+                  <li className="study-item">
+                    <div className="study-icon">
+                      <i className="fas fa-file-pdf"></i>
+                    </div>
+                    <div className="study-info">
+                      <strong>Mathematics Formulas</strong>
+                      <span>PDF • Updated 2 days ago</span>
+                    </div>
+                    <button className="view-btn">View</button>
+                  </li>
+                  <li className="study-item">
+                    <div className="study-icon">
+                      <i className="fas fa-file-powerpoint"></i>
+                    </div>
+                    <div className="study-info">
+                      <strong>Science Presentation</strong>
+                      <span>PPT • Updated 5 days ago</span>
+                    </div>
+                    <button className="view-btn">View</button>
+                  </li>
+                  <li className="study-item">
+                    <div className="study-icon">
+                      <i className="fas fa-file-word"></i>
+                    </div>
+                    <div className="study-info">
+                      <strong>History Notes</strong>
+                      <span>DOC • Updated 1 week ago</span>
+                    </div>
+                    <button className="view-btn">View</button>
+                  </li>
+                </ul>
+              </div>
+              <div className="study-section">
+                <h3>Recommended Materials</h3>
+                <ul className="study-list">
+                  <li className="study-item">
+                    <div className="study-icon">
+                      <i className="fas fa-book"></i>
+                    </div>
+                    <div className="study-info">
+                      <strong>English Literature</strong>
+                      <span>Chapter 5-7 • Reading</span>
+                    </div>
+                    <button className="view-btn">View</button>
+                  </li>
+                  <li className="study-item">
+                    <div className="study-icon">
+                      <i className="fas fa-video"></i>
+                    </div>
+                    <div className="study-info">
+                      <strong>Chemistry Lab Demo</strong>
+                      <span>Video • 15 minutes</span>
+                    </div>
+                    <button className="view-btn">View</button>
+                  </li>
+                </ul>
+              </div>
             </div>
+          </div>
+        </div>
+      )}
 
-            <div className="tasks-list">
-              {dailyTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className={`task-item ${task.completed ? "completed" : ""}`}
-                >
-                  <div
-                    className="task-checkbox"
-                    onClick={() => toggleTaskCompletion(task.id)}
-                  >
-                    {task.completed && <i className="fas fa-check"></i>}
-                  </div>
-                  <span className="task-title">{task.title}</span>
-                  <button
-                    className="delete-task"
-                    onClick={() => deleteTask(task.id)}
-                  >
-                    <i className="fas fa-trash-alt"></i>
-                  </button>
+      {isResourcesModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button
+              className="close-btn"
+              onClick={() => setResourcesModalOpen(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Educational Resources</h2>
+            <div className="search-bar">
+              <input type="text" placeholder="Search resources..." />
+              <i className="fas fa-search"></i>
+            </div>
+            <div className="resources-categories">
+              <div className="resource-category">
+                <div className="category-icon">
+                  <i className="fas fa-book"></i>
                 </div>
-              ))}
+                <span>Textbooks</span>
+              </div>
+              <div className="resource-category">
+                <div className="category-icon">
+                  <i className="fas fa-video"></i>
+                </div>
+                <span>Videos</span>
+              </div>
+              <div className="resource-category">
+                <div className="category-icon">
+                  <i className="fas fa-file-pdf"></i>
+                </div>
+                <span>Documents</span>
+              </div>
+              <div className="resource-category">
+                <div className="category-icon">
+                  <i className="fas fa-link"></i>
+                </div>
+                <span>Links</span>
+              </div>
+              <div className="resource-category">
+                <div className="category-icon">
+                  <i className="fas fa-puzzle-piece"></i>
+                </div>
+                <span>Interactive</span>
+              </div>
             </div>
+            <div className="resources-list">
+              <h3>Recently Accessed</h3>
+              <div className="resource-items">
+                <div className="resource-item">
+                  <div className="resource-item-icon">
+                    <i className="fas fa-file-pdf"></i>
+                  </div>
+                  <div className="resource-item-info">
+                    <strong>Algebra Textbook</strong>
+                    <span>PDF • 245 pages</span>
+                  </div>
+                  <button className="download-btn">Download</button>
+                </div>
+                <div className="resource-item">
+                  <div className="resource-item-icon">
+                    <i className="fas fa-video"></i>
+                  </div>
+                  <div className="resource-item-info">
+                    <strong>Physics Experiment</strong>
+                    <span>Video • 18 minutes</span>
+                  </div>
+                  <button className="view-btn">View</button>
+                </div>
+                <div className="resource-item">
+                  <div className="resource-item-icon">
+                    <i className="fas fa-link"></i>
+                  </div>
+                  <div className="resource-item-info">
+                    <strong>Research Resource</strong>
+                    <span>Web Link • Science Portal</span>
+                  </div>
+                  <button className="open-btn">Open</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-            <div className="tasks-summary">
-              <span>
-                {dailyTasks.filter((task) => task.completed).length} of{" "}
-                {dailyTasks.length} tasks completed
-              </span>
-              <div className="progress-bar">
-                <div
-                  className="progress"
-                  style={{
-                    width: `${
-                      (dailyTasks.filter((task) => task.completed).length /
-                        dailyTasks.length) *
-                      100
-                    }%`,
-                  }}
-                ></div>
+      {isTestsModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button
+              className="close-btn"
+              onClick={() => setTestsModalOpen(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Tests & Assessments</h2>
+            <div className="tests-tabs">
+              <button className="tab-btn active">Upcoming</button>
+              <button className="tab-btn">Past Tests</button>
+              <button className="tab-btn">Practice</button>
+            </div>
+            <div className="tests-content">
+              <div className="tests-section">
+                <h3>Upcoming Tests</h3>
+                <div className="test-item upcoming">
+                  <div className="test-icon">
+                    <i className="fas fa-file-alt"></i>
+                  </div>
+                  <div className="test-info">
+                    <strong>Mathematics Mid-Term</strong>
+                    <div className="test-details">
+                      <span><i className="fas fa-calendar"></i> Next Monday</span>
+                      <span><i className="fas fa-clock"></i> 90 minutes</span>
+                      <span><i className="fas fa-bookmark"></i> Chapters 1-5</span>
+                    </div>
+                  </div>
+                  <div className="test-actions">
+                    <button className="prepare-btn">Prepare</button>
+                  </div>
+                </div>
+                <div className="test-item upcoming">
+                  <div className="test-icon">
+                    <i className="fas fa-flask"></i>
+                  </div>
+                  <div className="test-info">
+                    <strong>Science Lab Test</strong>
+                    <div className="test-details">
+                      <span><i className="fas fa-calendar"></i> Next Friday</span>
+                      <span><i className="fas fa-clock"></i> 60 minutes</span>
+                      <span><i className="fas fa-bookmark"></i> Lab Experiments 3-6</span>
+                    </div>
+                  </div>
+                  <div className="test-actions">
+                    <button className="prepare-btn">Prepare</button>
+                  </div>
+                </div>
+              </div>
+              <div className="practice-section">
+                <h3>Recommended Practice</h3>
+                <div className="practice-items">
+                  <div className="practice-item">
+                    <div className="practice-icon">
+                      <i className="fas fa-calculator"></i>
+                    </div>
+                    <div className="practice-info">
+                      <strong>Algebra Practice</strong>
+                      <span>10 questions • 20 minutes</span>
+                    </div>
+                    <button className="start-btn">Start</button>
+                  </div>
+                  <div className="practice-item">
+                    <div className="practice-icon">
+                      <i className="fas fa-language"></i>
+                    </div>
+                    <div className="practice-info">
+                      <strong>Grammar Review</strong>
+                      <span>15 questions • 15 minutes</span>
+                    </div>
+                    <button className="start-btn">Start</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isQuizzesModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button
+              className="close-btn"
+              onClick={() => setQuizzesModalOpen(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Quizzes</h2>
+            <div className="quizzes-content">
+              <div className="available-quizzes">
+                <h3>Available Quizzes</h3>
+                <div className="quiz-items">
+                  <div className="quiz-item">
+                    <div className="quiz-info">
+                      <div className="quiz-title">
+                        <i className="fas fa-question-circle"></i>
+                        <strong>Math Concepts</strong>
+                      </div>
+                      <div className="quiz-details">
+                        <span>10 questions • 15 minutes</span>
+                        <div className="quiz-difficulty easy">
+                          <i className="fas fa-signal"></i> Easy
+                        </div>
+                      </div>
+                    </div>
+                    <button className="assign-quiz-btn">Assign Quiz</button>
+                  </div>
+                  <div className="quiz-item">
+                    <div className="quiz-info">
+                      <div className="quiz-title">
+                        <i className="fas fa-atom"></i>
+                        <strong>Science Concepts</strong>
+                      </div>
+                      <div className="quiz-details">
+                        <span>15 questions • 20 minutes</span>
+                        <div className="quiz-difficulty medium">
+                          <i className="fas fa-signal"></i> Medium
+                        </div>
+                      </div>
+                    </div>
+                    <button className="assign-quiz-btn">Assign Quiz</button>
+                  </div>
+                  <div className="quiz-item">
+                    <div className="quiz-info">
+                      <div className="quiz-title">
+                        <i className="fas fa-book-open"></i>
+                        <strong>Literature Analysis</strong>
+                      </div>
+                      <div className="quiz-details">
+                        <span>8 questions • 25 minutes</span>
+                        <div className="quiz-difficulty hard">
+                          <i className="fas fa-signal"></i> Hard
+                        </div>
+                      </div>
+                    </div>
+                    <button className="assign-quiz-btn">Assign Quiz</button>
+                  </div>
+                </div>
+              </div>
+              <div className="quiz-history">
+                <h3>Average Quiz Score</h3>
+                <div className="history-items">
+                  <div className="history-item">
+                    <div className="history-info">
+                      <strong>Geography Quiz</strong>
+                      <div className="score-info">
+                        <span className="score">Score: 85%</span>
+                        <span className="date">Last week</span>
+                      </div>
+                    </div>
+                    <button className="review-btn">Review</button>
+                  </div>
+                  <div className="history-item">
+                    <div className="history-info">
+                      <strong>Vocabulary Test</strong>
+                      <div className="score-info">
+                        <span className="score">Score: 92%</span>
+                        <span className="date">2 weeks ago</span>
+                      </div>
+                    </div>
+                    <button className="review-btn">Review</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1217,6 +1470,72 @@ const Dashboard = () => {
             <button className="reminder-save-btn" onClick={handleSaveReminder}>
               Save Reminder
             </button>
+          </div>
+        </div>
+      )}
+
+      {isDailyTasksModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content daily-tasks-modal">
+            <button
+              className="close-btn"
+              onClick={() => setDailyTasksModalOpen(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Daily Tasks</h2>
+            
+            <form className="add-task-form" onSubmit={(e) => {
+              e.preventDefault();
+              const input = e.target.elements.taskInput;
+              addNewTask(input.value);
+              input.value = "";
+            }}>
+              <input
+                type="text"
+                name="taskInput"
+                placeholder="Add a new task..."
+                autoComplete="off"
+              />
+              <span className="task-tip">Press Enter to add</span>
+            </form>
+            
+            <div className="tasks-list">
+              {dailyTasks.map((task) => (
+                <div
+                  key={task.id}
+                  className={`task-item ${task.completed ? "completed" : ""}`}
+                >
+                  <div
+                    className="task-checkbox"
+                    onClick={() => toggleTaskCompletion(task.id)}
+                  >
+                    {task.completed && <i className="fas fa-check"></i>}
+                  </div>
+                  <span className="task-title">{task.title}</span>
+                  <button
+                    className="delete-task"
+                    onClick={() => deleteTask(task.id)}
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
+              ))}
+            </div>
+            
+            <div className="tasks-summary">
+              <span>{dailyTasks.filter(task => task.completed).length} of {dailyTasks.length} tasks completed</span>
+              <span>{Math.round((dailyTasks.filter(task => task.completed).length / dailyTasks.length) * 100) || 0}% complete</span>
+            </div>
+            
+            <div className="progress-bar">
+              <div
+                className="progress"
+                style={{
+                  width: `${Math.round((dailyTasks.filter(task => task.completed).length / dailyTasks.length) * 100) || 0}%`
+                }}
+              ></div>
+            </div>
           </div>
         </div>
       )}
