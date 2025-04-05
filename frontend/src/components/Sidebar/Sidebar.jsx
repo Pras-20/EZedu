@@ -53,10 +53,7 @@ const Sidebar = () => {
       </div>
 
       <nav className="nav-menu">
-        <Link
-          to="/teacher-dashboard"
-          className={`nav-item ${isActive("/teacher-dashboard") ? "active" : ""}`}
-        >
+        <Link to="/" className={`nav-item ${isActive("/") ? "active" : ""}`}>
           <div className="nav-icon">
             <i className="fas fa-home"></i>
           </div>
@@ -65,7 +62,9 @@ const Sidebar = () => {
 
         <Link
           to="/teacher-dashboard"
-          className={`nav-item ${isActive("/teacher-dashboard") ? "active" : ""}`}
+          className={`nav-item ${
+            isActive("/teacher-dashboard") ? "active" : ""
+          }`}
         >
           <div className="nav-icon">
             <i className="fas fa-chalkboard-teacher"></i>
