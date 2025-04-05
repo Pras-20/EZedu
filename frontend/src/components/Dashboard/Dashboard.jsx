@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./Dashboard.css";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -169,8 +170,8 @@ const Dashboard = () => {
   }, [students]);
 
   const handleProfileClick = () => {
-    // Navigate to the profile page
-    window.location.href = '/profile';
+    // Navigate to the profile page using React Router
+    navigate('/profile');
   };
 
   const handleSearchClick = useCallback(() => {
