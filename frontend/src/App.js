@@ -4,7 +4,8 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TeacherDashboard from "./components/TeacherDashboard/TeacherDashboard";
 import TeacherQueries from './components/TeacherQueries/TeacherQueries';
-import Profile from './components/Profile/Profile';
+import Notifications from './components/Notifications/Notifications';
+import ClassesPage from './components/ClassesPage/ClassesPage';
 import "./App.css";
 
 const Layout = ({ children }) => (
@@ -41,8 +42,20 @@ const router = createBrowserRouter(
       ),
     },
     {
-      path: "/profile",
-      element: <Profile />,
+      path: "/Notifications",
+      element: (
+        <Layout>
+          <Notifications />
+        </Layout>
+      ),
+    },
+    {
+      path: "/classes",
+      element: (
+        <Layout>
+          <ClassesPage />
+        </Layout>
+      ),
     },
   ],
   {
