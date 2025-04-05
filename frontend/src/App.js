@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TeacherDashboard from "./components/TeacherDashboard/TeacherDashboard";
 import TeacherQueries from './components/TeacherQueries/TeacherQueries';
+import Notifications from './components/Notifications/Notifications';
 import "./App.css";
 
 const Layout = ({ children }) => (
@@ -36,6 +37,14 @@ const router = createBrowserRouter(
       element: (
         <Layout>
           <TeacherQueries />
+        </Layout>
+      ),
+    },
+    {
+      path: "/Notifications",
+      element: (
+        <Layout>
+          <Notifications />
         </Layout>
       ),
     },
