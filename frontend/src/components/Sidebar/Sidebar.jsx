@@ -13,31 +13,49 @@ const Sidebar = () => {
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
-  
+
     const newSidebarWidth = !isCollapsed ? "80px" : "250px";
     const newCardMarginLeft = !isCollapsed ? "-100px" : "-250px";
-  
-    document.documentElement.style.setProperty("--sidebar-width", newSidebarWidth);
-    document.documentElement.style.setProperty("--card-margin-left", newCardMarginLeft);
+
+    document.documentElement.style.setProperty(
+      "--sidebar-width",
+      newSidebarWidth
+    );
+    document.documentElement.style.setProperty(
+      "--card-margin-left",
+      newCardMarginLeft
+    );
   };
 
-// inside Sidebar component
-useEffect(() => {
-  const initialSidebarWidth = isCollapsed ? "80px" : "250px";
-  const initialCardMarginLeft = isCollapsed ? "-100px" : "-250px";
+  // inside Sidebar component
+  useEffect(() => {
+    const initialSidebarWidth = isCollapsed ? "80px" : "250px";
+    const initialCardMarginLeft = isCollapsed ? "-100px" : "-250px";
 
-  document.documentElement.style.setProperty("--sidebar-width", initialSidebarWidth);
-  document.documentElement.style.setProperty("--card-margin-left", initialCardMarginLeft);
-}, [isCollapsed]);
+    document.documentElement.style.setProperty(
+      "--sidebar-width",
+      initialSidebarWidth
+    );
+    document.documentElement.style.setProperty(
+      "--card-margin-left",
+      initialCardMarginLeft
+    );
+  }, [isCollapsed]);
 
-// inside Sidebar component
-useEffect(() => {
-  const initialSidebarWidth = isCollapsed ? "80px" : "250px";
-  const initialCardMarginLeft = isCollapsed ? "-100px" : "-250px";
+  // inside Sidebar component
+  useEffect(() => {
+    const initialSidebarWidth = isCollapsed ? "80px" : "250px";
+    const initialCardMarginLeft = isCollapsed ? "-100px" : "-250px";
 
-  document.documentElement.style.setProperty("--sidebar-width", initialSidebarWidth);
-  document.documentElement.style.setProperty("--card-margin-left", initialCardMarginLeft);
-}, [isCollapsed]);
+    document.documentElement.style.setProperty(
+      "--sidebar-width",
+      initialSidebarWidth
+    );
+    document.documentElement.style.setProperty(
+      "--card-margin-left",
+      initialCardMarginLeft
+    );
+  }, [isCollapsed]);
 
   return (
     <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
@@ -78,16 +96,6 @@ useEffect(() => {
             <i className="fas fa-users"></i>
           </div>
           <span className="nav-text">Classes</span>
-        </Link>
-
-        <Link
-          to="/schedule"
-          className={`nav-item ${isActive("/schedule") ? "active" : ""}`}
-        >
-          <div className="nav-icon">
-            <i className="fas fa-calendar-alt"></i>
-          </div>
-          <span className="nav-text">Schedule/Calendar</span>
         </Link>
       </nav>
 

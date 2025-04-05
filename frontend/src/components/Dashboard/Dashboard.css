@@ -859,14 +859,16 @@
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #ffffff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 12px;
   width: 90%;
   max-width: 500px;
   position: relative;
-  max-height: 80vh; /* Limit height to 80% of viewport height */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .close-btn {
@@ -877,6 +879,12 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #333;
 }
 
 .modal-content h2 {
@@ -1828,4 +1836,86 @@
   text-align: center;
   padding: 2rem;
   color: #5f6368;
+}
+
+.reminder-save-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.reminder-save-btn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.date-time-input,
+.additional-options select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.date-time-input:focus,
+.additional-options select:focus,
+textarea:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.search-bar input[type="text"] {
+  width: calc(100% - 40px);
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-bar i {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5f6368;
+}
+
+.filter-section {
+  margin-top: 20px;
+}
+
+.filter-section label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Add additional options for repeat and priority */
+.additional-options {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.additional-options select {
+  width: 48%;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
 }

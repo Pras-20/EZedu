@@ -35,9 +35,11 @@ const Dashboard = () => {
     useState(null);
   const [attendanceStats, setAttendanceStats] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
-  const [isReminderModalOpen, setReminderModalOpen] = useState(false);
-  const [reminderMessage, setReminderMessage] = useState("");
-  const [reminderDate, setReminderDate] = useState("");
+  const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
+  const [reminderDateTime, setReminderDateTime] = useState("");
+  const [repeatOption, setRepeatOption] = useState("none");
+  const [priority, setPriority] = useState("normal");
+  const [customMessage, setCustomMessage] = useState("");
 
   const students = useMemo(
     () => [
@@ -352,20 +354,45 @@ const Dashboard = () => {
     setFilteredStudents(students);
   };
 
-  const handleAnswerQueriesClick = () => {
-    const baseUrl = window.location.origin;
-    window.location.href = `${baseUrl}/#/teacher-queries`;
-  };
+  useEffect(() => {
+    if (!("Notification" in window)) {
+      console.log("This browser does not support desktop notification");
+    } else if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
 
-  const handleSetReminderClick = () => {
-    setReminderModalOpen(true);
+  const scheduleReminderNotifications = (message, date) => {
+    const reminderTime = new Date(date).getTime();
+    const now = Date.now();
+    const fiveMinutesBefore = reminderTime - 5 * 60 * 1000;
+
+    if (fiveMinutesBefore > now) {
+      setTimeout(() => {
+        new Notification("Reminder", {
+          body: `Upcoming: ${message}`,
+        });
+      }, fiveMinutesBefore - now);
+    }
+
+    if (reminderTime > now) {
+      setTimeout(() => {
+        new Notification("Reminder", {
+          body: `It's time: ${message}`,
+        });
+      }, reminderTime - now);
+    }
   };
 
   const handleSaveReminder = () => {
-    console.log("Reminder set:", { message: reminderMessage, date: reminderDate });
-    setReminderModalOpen(false);
-    setReminderMessage("");
-    setReminderDate("");
+    console.log("Reminder saved with:", {
+      dateTime: reminderDateTime,
+      repeatOption,
+      priority,
+      customMessage,
+    });
+    scheduleReminderNotifications(customMessage, reminderDateTime);
+    setIsReminderModalOpen(false);
   };
 
   return (
@@ -693,7 +720,12 @@ const Dashboard = () => {
                   <p>Set reminders for tasks!</p>
                 </div>
               </div>
-              <button className="set-btn">Set</button>
+              <button
+                className="set-btn"
+                onClick={() => setIsReminderModalOpen(true)}
+              >
+                Set
+              </button>
             </div>
           </section>
 
@@ -1114,29 +1146,57 @@ const Dashboard = () => {
       {isReminderModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <button className="close-btn" onClick={() => setReminderModalOpen(false)}>
+            <button
+              className="close-btn"
+              onClick={() => setIsReminderModalOpen(false)}
+            >
               <i className="fas fa-times"></i>
             </button>
             <h2>Set Reminder</h2>
             <div className="search-bar">
               <input
-                type="text"
-                placeholder="Reminder Message"
-                value={reminderMessage}
-                onChange={(e) => setReminderMessage(e.target.value)}
+                type="datetime-local"
+                className="date-time-input"
+                value={reminderDateTime}
+                onChange={(e) => setReminderDateTime(e.target.value)}
               />
               <i className="fas fa-clock"></i>
             </div>
-            <div className="filter-section">
-              <label>Select Date and Time:</label>
-              <input
-                type="datetime-local"
-                className="date-time-input"
-                value={reminderDate}
-                onChange={(e) => setReminderDate(e.target.value)}
-              />
+            <div className="additional-options">
+              <select
+                value={repeatOption}
+                onChange={(e) => setRepeatOption(e.target.value)}
+              >
+                <option value="none">No Repeat</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+              >
+                <option value="low">Low Priority</option>
+                <option value="normal">Normal Priority</option>
+                <option value="high">High Priority</option>
+              </select>
             </div>
-            <button className="save-btn reminder-save-btn" onClick={handleSaveReminder}>Save Reminder</button>
+            <textarea
+              placeholder="Add a custom message"
+              value={customMessage}
+              onChange={(e) => setCustomMessage(e.target.value)}
+              rows="3"
+              style={{
+                width: "100%",
+                marginTop: "10px",
+                padding: "10px",
+                borderRadius: "4px",
+                border: "1px solid #e0e0e0",
+              }}
+            />
+            <button className="reminder-save-btn" onClick={handleSaveReminder}>
+              Save Reminder
+            </button>
           </div>
         </div>
       )}
