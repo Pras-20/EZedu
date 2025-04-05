@@ -5,6 +5,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import TeacherDashboard from "./components/TeacherDashboard/TeacherDashboard";
 import TeacherQueries from './components/TeacherQueries/TeacherQueries';
 import Notifications from './components/Notifications/Notifications';
+import ClassesPage from './components/ClassesPage/ClassesPage';
 import "./App.css";
 
 const Layout = ({ children }) => (
@@ -45,6 +46,14 @@ const router = createBrowserRouter(
       element: (
         <Layout>
           <Notifications />
+        </Layout>
+      ),
+    },
+    {
+      path: "/classes",
+      element: (
+        <Layout>
+          <ClassesPage />
         </Layout>
       ),
     },
