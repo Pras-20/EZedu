@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./Dashboard.css";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
@@ -301,12 +302,14 @@ const Dashboard = () => {
             </div>
             <span>Mark Attendance</span>
           </button>
-          <button className="action-btn" onClick={handleAnswerQueriesClick}>
-            <div className="circle-icon">
-              <i className="fas fa-envelope"></i>
-            </div>
-            <span>Answer Queries</span>
-          </button>
+          <Link to="/teacher-queries">
+            <button className="action-btn">
+              <div className="circle-icon">
+                <i className="fas fa-question-circle"></i>
+              </div>
+              <span>Answer Queries</span>
+            </button>
+          </Link>
           <button className="action-btn" onClick={handleGenerateReportClick}>
             <div className="circle-icon">
               <i className="fas fa-chart-line"></i>
