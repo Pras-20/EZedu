@@ -2026,7 +2026,7 @@ textarea {
 
 .view-btn:hover {
   background-color: #4285f4;
-  color: white;
+   color: white;
 }
 
 /* Resources Modal Styles */
@@ -2141,7 +2141,8 @@ textarea {
   margin-top: 4px;
 }
 
-.download-btn, .open-btn {
+.download-btn,
+.open-btn {
   padding: 8px 16px;
   background-color: white;
   color: #4285f4;
@@ -2152,7 +2153,8 @@ textarea {
   transition: all 0.3s ease;
 }
 
-.download-btn:hover, .open-btn:hover {
+.download-btn:hover,
+.open-btn:hover {
   background-color: #4285f4;
   color: white;
   border-color: #4285f4;
@@ -2204,7 +2206,8 @@ textarea {
   gap: 24px;
 }
 
-.tests-section h3, .practice-section h3 {
+.tests-section h3,
+.practice-section h3 {
   font-size: 18px;
   color: #202124;
   margin-bottom: 16px;
@@ -2364,19 +2367,22 @@ textarea {
   gap: 32px;
 }
 
-.available-quizzes, .quiz-history {
+.available-quizzes,
+.quiz-history {
   background-color: #f8f9fa;
   border-radius: 12px;
   padding: 16px;
 }
 
-.available-quizzes h3, .quiz-history h3 {
+.available-quizzes h3,
+.quiz-history h3 {
   font-size: 18px;
   color: #202124;
   margin-bottom: 16px;
 }
 
-.quiz-items, .history-items {
+.quiz-items,
+.history-items {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -2529,4 +2535,3 @@ textarea {
   max-height: 85vh;
   overflow-y: auto;
 }
-
