@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import TeacherDashboard from "./components/TeacherDashboard/TeacherDashboard";
 import TeacherQueries from "./components/TeacherQueries/TeacherQueries";
-import ClassesPage from "./components/ClassesPage/ClassesPage";
+import BlankPage from "./components/BlankPage/BlankPage";
 import Sidebar from "./components/Sidebar/Sidebar";
 import NotFound from "./components/NotFound/NotFound";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
@@ -23,7 +23,7 @@ function App() {
             <Route path="/" element={<Navigate to="/teacher-dashboard" />} />
             <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
             <Route path="/teacher/queries" element={<TeacherQueries />} />
-            <Route path="/classes" element={<ClassesPage />} />
+            <Route path="/classes" element={<BlankPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
