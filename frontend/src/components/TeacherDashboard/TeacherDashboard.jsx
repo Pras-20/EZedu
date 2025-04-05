@@ -1183,7 +1183,7 @@ const TeacherDashboard = () => {
       <div className="dashboard-section schedule-section">
         <div className="section-header">
           <div className="header-title">
-            <h2>Your daily schedule</h2>
+          <h2>Your daily schedule</h2>
             <button
               className="info-button"
               onClick={() => setShowScheduleInfo(!showScheduleInfo)}
@@ -1212,10 +1212,10 @@ const TeacherDashboard = () => {
             >
               <i className="fas fa-plus"></i> Add Schedule
             </button>
-            <span className="time-icon">
-              <i className="fas fa-clock"></i>
-            </span>
-          </div>
+          <span className="time-icon">
+            <i className="fas fa-clock"></i>
+          </span>
+        </div>
         </div>
 
         {showAddSchedule && (
@@ -1310,12 +1310,12 @@ const TeacherDashboard = () => {
                       >
                         <i className="fas fa-times"></i>
                       </button>
-                    </div>
-                  </div>
+            </div>
+          </div>
                 )}
-              </div>
+            </div>
               <div className="time-slot">{item.time}</div>
-              <div>
+            <div>
                 <select
                   className={`status-badge ${item.status}`}
                   value={item.status}
@@ -1325,7 +1325,7 @@ const TeacherDashboard = () => {
                   <option value="in-progress">In Progress</option>
                   <option value="completed">Completed</option>
                 </select>
-              </div>
+            </div>
               <div className="schedule-actions">
                 <button
                   className={`complete-btn ${
@@ -1345,7 +1345,7 @@ const TeacherDashboard = () => {
                 >
                   <i className="fas fa-trash"></i>
                 </button>
-              </div>
+          </div>
             </div>
           ))}
         </div>
@@ -1377,7 +1377,7 @@ const TeacherDashboard = () => {
                 <span className="notification-title">{notification.title}</span>
                 <span className="notification-time">
                   {notification.timestamp}
-                </span>
+            </span>
                 <div className="notification-hover-content">
                   <p>{notification.description}</p>
                 </div>
@@ -1416,7 +1416,7 @@ const TeacherDashboard = () => {
                 onClick={() => setShowImagePreview(false)}
               >
                 <i className="fas fa-times"></i>
-              </button>
+            </button>
             </div>
             <div className="preview-content">
               <img src={selectedImage.url} alt={selectedImage.title} />
@@ -1436,8 +1436,8 @@ const TeacherDashboard = () => {
                 onClick={() => setShowStudentSelection(false)}
               >
                 <i className="fas fa-times"></i>
-              </button>
-            </div>
+            </button>
+          </div>
             <div className="modal-content">
               <div className="student-filters">
                 <button
@@ -1528,8 +1528,8 @@ const TeacherDashboard = () => {
                     }
                   >
                     Assignments
-                  </button>
-                </div>
+            </button>
+          </div>
               </div>
               <div className="students-list">
                 {students.map((student) => (
@@ -1545,7 +1545,7 @@ const TeacherDashboard = () => {
                         {student.interests.map((interest) => (
                           <span key={interest} className="interest-tag">
                             {interest}
-                          </span>
+            </span>
                         ))}
                       </div>
                     </label>
@@ -1560,16 +1560,16 @@ const TeacherDashboard = () => {
                 disabled={selectedStudents.length === 0}
               >
                 Send Notification ({selectedStudents.length} selected)
-              </button>
-            </div>
+            </button>
           </div>
         </div>
+      </div>
       )}
 
       {/* Class Statistics Section */}
       <div className="dashboard-section stats-section">
         <div className="section-header">
-          <h2>Class Statistics</h2>
+        <h2>Class Statistics</h2>
           <span className="stats-icon">
             <i className="fas fa-chart-line"></i>
           </span>
@@ -1599,11 +1599,11 @@ const TeacherDashboard = () => {
               {selectedStat === key && (
                 <div className="stat-details">
                   <p>{data.details}</p>
-                </div>
+          </div>
               )}
-            </div>
+          </div>
           ))}
-        </div>
+          </div>
 
         <div className="grade-distribution">
           <div className="grade-chart-placeholder">
@@ -1618,14 +1618,14 @@ const TeacherDashboard = () => {
               <div className="bar" style={{ height: "60%" }}></div>
               <div className="bar" style={{ height: "40%" }}></div>
               <div className="bar" style={{ height: "20%" }}></div>
-            </div>
+          </div>
             <div className="grade-labels">
               <span>0-20</span>
               <span>21-40</span>
               <span>41-60</span>
               <span>61-80</span>
               <span>81-100</span>
-            </div>
+          </div>
           </div>
         </div>
       </div>
@@ -1635,51 +1635,51 @@ const TeacherDashboard = () => {
         <div className="section-header">
           <div className="header-title">
             <i className="fas fa-chart-line"></i>
-            <h2>Overview</h2>
+          <h2>Overview</h2>
           </div>
         </div>
 
-        <div className="overview-header">
+          <div className="overview-header">
           <div>Title</div>
           <div>Progress</div>
-          <div>Status</div>
+            <div>Status</div>
           <div>Actions</div>
-        </div>
+          </div>
 
         {overviewItems.map((item) => (
-          <div key={item.id} className="overview-row">
-            <div className="overview-title">
+            <div key={item.id} className="overview-row">
+              <div className="overview-title">
               <i className={`fas ${item.icon}`}></i>
-              {item.title}
+                {item.title}
             </div>
-            <div className="overview-value">{item.value}</div>
-            <div
-              className={`overview-status ${item.status}`}
-              onClick={() => handleStatusChange(item.id)}
+              <div className="overview-value">{item.value}</div>
+              <div
+                className={`overview-status ${item.status}`}
+                onClick={() => handleStatusChange(item.id)}
               style={{
                 cursor: "pointer",
                 backgroundColor: statusTypes[item.status]?.color,
               }}
-            >
+              >
               {statusTypes[item.status]?.label || item.status}
             </div>
-            <div className="overview-action">
-              <button
-                className="action-btn view"
+              <div className="overview-action">
+                <button
+                  className="action-btn view"
                 onClick={() => handleView(item.id)}
-              >
-                <i className="fas fa-eye"></i>
+                >
+                  <i className="fas fa-eye"></i>
                 View
-              </button>
-              <button
-                className="action-btn edit"
+                </button>
+                <button
+                  className="action-btn edit"
                 onClick={() => handleEdit(item.id)}
-              >
-                <i className="fas fa-edit"></i>
+                >
+                  <i className="fas fa-edit"></i>
                 Edit
-              </button>
-            </div>
+                </button>
           </div>
+            </div>
         ))}
 
         {/* View Modal */}
@@ -1828,7 +1828,7 @@ const TeacherDashboard = () => {
 
         {!selectedSubject ? (
           <>
-            <div className="progress-metrics">
+        <div className="progress-metrics">
               <div className="metric-card">
                 <div
                   className="metric-circle"
@@ -1836,10 +1836,10 @@ const TeacherDashboard = () => {
                 >
                   <div className="metric-content">
                     <span className="metric-value">75%</span>
-                  </div>
-                </div>
+          </div>
+          </div>
                 <span className="metric-label">Average Performance</span>
-              </div>
+        </div>
 
               <div className="metric-card">
                 <div className="metric-circle" style={{ "--progress": "88%" }}>
@@ -1848,17 +1848,17 @@ const TeacherDashboard = () => {
                   </div>
                 </div>
                 <span className="metric-label">Attendance Rate</span>
-              </div>
+      </div>
 
               <div className="metric-card">
                 <div className="metric-circle" style={{ "--progress": "92%" }}>
                   <div className="metric-content">
                     <span className="metric-value">92%</span>
-                  </div>
-                </div>
+          </div>
+          </div>
                 <span className="metric-label">Assignment Completion</span>
-              </div>
-            </div>
+          </div>
+          </div>
 
             <div className="progress-details">
               {Object.entries(subjectData).map(([subject, data]) => (
@@ -1881,7 +1881,7 @@ const TeacherDashboard = () => {
                           : "fa-palette"
                       }`}
                     ></i>
-                  </div>
+          </div>
                   <div className="progress-info">
                     <div className="progress-subject">{subject}</div>
                     <div className="progress-bar-container">
@@ -1893,11 +1893,11 @@ const TeacherDashboard = () => {
                           }%`,
                         }}
                       />
-                    </div>
-                  </div>
+          </div>
+        </div>
                   <div className="progress-percentage">
                     {data.weeklyProgress[data.weeklyProgress.length - 1]}%
-                  </div>
+      </div>
                   <div
                     className={`trend-indicator ${
                       data.weeklyProgress[data.weeklyProgress.length - 1] >

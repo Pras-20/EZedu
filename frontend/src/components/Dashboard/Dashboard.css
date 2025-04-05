@@ -1249,3 +1249,7 @@
   overflow-x: hidden; /* Prevent horizontal scrolling */
   max-width: 100%; /* Ensure it doesn't exceed modal width */
 }
+
+.reminder-save-btn {
+  margin-top: 20px; /* Adjust the spacing as needed */
+}

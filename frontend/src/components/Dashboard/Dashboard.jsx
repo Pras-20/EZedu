@@ -21,6 +21,9 @@ const Dashboard = () => {
   const [isAssignmentModalOpen, setAssignmentModalOpen] = useState(false);
   const [assignments, setAssignments] = useState([]);
   const [currentAssignment, setCurrentAssignment] = useState(null);
+  const [isReminderModalOpen, setReminderModalOpen] = useState(false);
+  const [reminderMessage, setReminderMessage] = useState("");
+  const [reminderDate, setReminderDate] = useState("");
 
   const students = useMemo(
     () => [
@@ -274,6 +277,17 @@ const Dashboard = () => {
     // This forces a complete page reload and should resolve routing issues
   };
 
+  const handleSetReminderClick = () => {
+    setReminderModalOpen(true);
+  };
+
+  const handleSaveReminder = () => {
+    console.log("Reminder set:", { message: reminderMessage, date: reminderDate });
+    setReminderModalOpen(false);
+    setReminderMessage("");
+    setReminderDate("");
+  };
+
   return (
     <main className="dashboard">
       <header className="dashboard-header">
@@ -303,7 +317,7 @@ const Dashboard = () => {
             <span>Mark Attendance</span>
           </button>
           <Link to="/teacher-queries">
-            <button className="action-btn">
+            <button className="action-btn" onClick={handleAnswerQueriesClick}>
               <div className="circle-icon">
                 <i className="fas fa-question-circle"></i>
               </div>
@@ -588,7 +602,6 @@ const Dashboard = () => {
           </section>
 
           <section className="tasks-section">
-            {/* <h2>Today's tasks</h2> */}
             <div className="reminders-card">
               <div className="card-content">
                 <div className="card-icon">
@@ -599,7 +612,9 @@ const Dashboard = () => {
                   <p>Set reminders for tasks!</p>
                 </div>
               </div>
-              <button className="set-btn">Set</button>
+              <button className="set-btn" onClick={handleSetReminderClick}>
+                Set
+              </button>
             </div>
           </section>
 
@@ -680,9 +695,13 @@ const Dashboard = () => {
               <input type="date" required />
 
               <label>Upload Files</label>
-              <input type="file" accept=".pdf,.doc,.docx" multiple />
-
-              <button type="submit">Save</button>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                multiple
+                className="file-input"
+              />
+              <button type="submit" className="save-btn">Save</button>
             </form>
 
             {currentAssignment && (
@@ -692,6 +711,36 @@ const Dashboard = () => {
                 Delete
               </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {isReminderModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-btn" onClick={() => setReminderModalOpen(false)}>
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>Set Reminder</h2>
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="Reminder Message"
+                value={reminderMessage}
+                onChange={(e) => setReminderMessage(e.target.value)}
+              />
+              <i className="fas fa-clock"></i>
+            </div>
+            <div className="filter-section">
+              <label>Select Date and Time:</label>
+              <input
+                type="datetime-local"
+                className="date-time-input"
+                value={reminderDate}
+                onChange={(e) => setReminderDate(e.target.value)}
+              />
+            </div>
+            <button className="save-btn reminder-save-btn" onClick={handleSaveReminder}>Save Reminder</button>
           </div>
         </div>
       )}
