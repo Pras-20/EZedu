@@ -378,7 +378,7 @@ const Dashboard = () => {
             <span>Mark Attendance</span>
           </button>
           <Link to="/teacher-queries">
-            <button className="action-btn" onClick={handleAnswerQueriesClick}>
+            <button className="action-btn">
               <div className="circle-icon">
                 <i className="fas fa-question-circle"></i>
               </div>
@@ -663,6 +663,7 @@ const Dashboard = () => {
           </section>
 
           <section className="tasks-section">
+            {/* <h2>Today's tasks</h2> */}
             <div className="reminders-card">
               <div className="card-content">
                 <div className="card-icon">
@@ -673,9 +674,7 @@ const Dashboard = () => {
                   <p>Set reminders for tasks!</p>
                 </div>
               </div>
-              <button className="set-btn" onClick={handleSetReminderClick}>
-                Set
-              </button>
+              <button className="set-btn">Set</button>
             </div>
           </section>
 
@@ -767,13 +766,9 @@ const Dashboard = () => {
               <input type="date" required />
 
               <label>Upload Files</label>
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx"
-                multiple
-                className="file-input"
-              />
-              <button type="submit" className="save-btn">Save</button>
+              <input type="file" accept=".pdf,.doc,.docx" multiple />
+
+              <button type="submit">Save</button>
             </form>
 
             {currentAssignment && (
