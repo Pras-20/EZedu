@@ -1,5 +1,6 @@
-
+import React, { useState } from "react";
 import "./TeacherDashboard.css";
+import { useNavigate } from "react-router-dom";
 
 const TeacherDashboard = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -511,6 +512,17 @@ const TeacherDashboard = () => {
   const SubjectDetails = ({ subject, data, onBack }) => {
     const [showTopPerformers, setShowTopPerformers] = useState(false);
     const [showNeedsAttention, setShowNeedsAttention] = useState(false);
+    const navigate = useNavigate();
+
+    const handleAnswerQueries = () => {
+      try {
+        navigate("/teacher/queries");
+      } catch (error) {
+        console.error("Navigation error:", error);
+        // Fallback navigation
+        window.location.href = "/teacher/queries";
+      }
+    };
 
     const studentData = {
       Mathematics: {
@@ -603,6 +615,13 @@ const TeacherDashboard = () => {
             {subject} Performance Details
           </div>
           <div className="header-actions">
+            <button
+              className="answer-queries-btn"
+              onClick={handleAnswerQueries}
+            >
+              <i className="fas fa-question-circle"></i>
+              Answer Queries
+            </button>
             <button className="back-to-overview" onClick={onBack}>
               <i className="fas fa-arrow-left"></i>
               Back to Overview

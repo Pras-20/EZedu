@@ -2618,3 +2618,27 @@
 .students-list::-webkit-scrollbar-thumb:hover {
   background: #999;
 }
+
+.answer-queries-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.answer-queries-btn:hover {
+  background: #1976d2;
+  transform: translateY(-2px);
+}
+
+.answer-queries-btn i {
+  font-size: 14px;
+}
