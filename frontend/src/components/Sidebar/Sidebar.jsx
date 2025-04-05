@@ -27,22 +27,6 @@ const Sidebar = () => {
     );
   };
 
-  // inside Sidebar component
-  useEffect(() => {
-    const initialSidebarWidth = isCollapsed ? "80px" : "250px";
-    const initialCardMarginLeft = isCollapsed ? "-100px" : "-250px";
-
-    document.documentElement.style.setProperty(
-      "--sidebar-width",
-      initialSidebarWidth
-    );
-    document.documentElement.style.setProperty(
-      "--card-margin-left",
-      initialCardMarginLeft
-    );
-  }, [isCollapsed]);
-
-  // inside Sidebar component
   useEffect(() => {
     const initialSidebarWidth = isCollapsed ? "80px" : "250px";
     const initialCardMarginLeft = isCollapsed ? "-100px" : "-250px";
@@ -69,7 +53,12 @@ const Sidebar = () => {
       </div>
 
       <nav className="nav-menu">
-        <Link to="/" className={`nav-item ${isActive("/") ? "active" : ""}`}>
+        <Link
+          to="/teacher-dashboard"
+          className={`nav-item ${
+            isActive("/teacher-dashboard") ? "active" : ""
+          }`}
+        >
           <div className="nav-icon">
             <i className="fas fa-home"></i>
           </div>
