@@ -44,8 +44,11 @@ const Sidebar = () => {
   return (
     <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="logo-container">
-        <div className="logo">
-          <i className="fas fa-graduation-cap"></i>
+        <div className="logo-wrapper">
+          <div className="logo">
+            <i className="fas fa-graduation-cap"></i>
+          </div>
+          <h1 className="logo-text">EZedu</h1>
         </div>
         <button className="toggle-btn" onClick={toggleSidebar}>
           <i className={`fas fa-chevron-${isCollapsed ? "right" : "left"}`}></i>
