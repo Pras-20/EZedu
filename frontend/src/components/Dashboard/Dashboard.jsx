@@ -801,13 +801,6 @@ const Dashboard = () => {
               </button>
             </div>
           </section>
-
-          <button className="action-btn" onClick={() => window.location.href = '/notifications'}>
-            <div className="circle-icon">
-              <i className="fas fa-bell"></i>
-            </div>
-            <span>Notifications</span>
-          </button>
         </aside>
       </div>
 
