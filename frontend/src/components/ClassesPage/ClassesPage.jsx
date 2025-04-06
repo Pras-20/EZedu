@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ClassesPage.css";
-import { CSVLink } from "react-csv";
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 // Sample Data - Moved outside component to avoid dependency issues
 const sampleClasses = [
@@ -234,22 +233,61 @@ const ClassesPage = () => {
       Teacher: cls.teacher,
       "Co-Teachers": cls.coTeachers.join(", "),
     }));
-    return csvData;
+    
+    // Create CSV content
+    const headers = ["Name", "Subject", "Students", "Schedule", "Teacher", "Co-Teachers"];
+    let csvContent = headers.join(",") + "\n";
+    
+    csvData.forEach(item => {
+      const row = [
+        `"${item.Name}"`,
+        `"${item.Subject}"`,
+        item.Students,
+        `"${item.Schedule}"`,
+        `"${item.Teacher}"`,
+        `"${item["Co-Teachers"]}"`
+      ];
+      csvContent += row.join(",") + "\n";
+    });
+    
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'classes.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const exportToPDF = () => {
     const doc = new jsPDF();
-    const tableColumn = ["Name", "Subject", "Students", "Schedule", "Teacher"];
-    const tableRows = classes.map((cls) => [
-      cls.name,
-      cls.subject,
-      cls.students,
-      `${cls.schedule.days.join(", ")} ${cls.schedule.time}`,
-      cls.teacher,
-    ]);
 
-    doc.autoTable(tableColumn, tableRows, { startY: 20 });
-    doc.save("classes.pdf");
+    // Set the title
+    doc.setFontSize(18);
+    doc.text('Classes Report', 14, 22);
+
+    // Prepare data for the table
+    const pdfData = classes.map((cls) => ({
+      Name: cls.name,
+      Subject: cls.subject,
+      Students: cls.students,
+      Schedule: `${cls.schedule.days.join(", ")} ${cls.schedule.time}`,
+      Teacher: cls.teacher,
+      "Co-Teachers": cls.coTeachers.join(", "),
+    }));
+
+    // Add the table to the PDF
+    doc.autoTable({
+      head: [['Name', 'Subject', 'Students', 'Schedule', 'Teacher', 'Co-Teachers']],
+      body: pdfData.map(item => [item.Name, item.Subject, item.Students, item.Schedule, item.Teacher, item["Co-Teachers"]]),
+      startY: 30,
+    });
+
+    // Save the PDF
+    doc.save('classes.pdf');
   };
 
   const handleSendMessage = () => {
@@ -279,13 +317,9 @@ const ClassesPage = () => {
             {isDarkMode ? "Light Mode" : "Dark Mode"}
           </button>
           <div className="export-buttons">
-            <CSVLink
-              data={exportToCSV()}
-              filename={"classes.csv"}
-              className="export-btn"
-            >
+            <button onClick={exportToCSV} className="export-btn">
               Export CSV
-            </CSVLink>
+            </button>
             <button className="export-btn" onClick={exportToPDF}>
               Export PDF
             </button>
