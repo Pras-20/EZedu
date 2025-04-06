@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Notifications.css'; // Ensure you have the necessary styles
 
 const Notifications = () => {
@@ -10,10 +10,12 @@ const Notifications = () => {
     outstandingTasks: '24 hours',
     newMembers: 'in-app',
   });
-  const [notificationMessage, setNotificationMessage] = useState('');
+  const [responseMessage, setResponseMessage] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [sortOrder, setSortOrder] = useState('latest');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [notifications, setNotifications] = useState([]);
 
   const handleButtonClick = (name, value) => {
     setSettings((prev) => ({ ...prev, [name]: value }));
@@ -21,27 +23,38 @@ const Notifications = () => {
 
   const handleSaveSettings = () => {
     setShowSettings(false); // Close the modal
-    setNotificationMessage('Settings Updated'); // Set the notification message
+    setResponseMessage('Settings Updated'); // Set the response message
     setTimeout(() => {
-      setNotificationMessage(''); // Clear the message after a few seconds
+      setResponseMessage(''); // Clear the response message after a few seconds
     }, 3000); // Adjust the duration as needed
   };
 
-  const notifications = [
-    { id: 1, message: "New assignment: Math Homework due next week.", type: "task", status: "unread" },
-    { id: 2, message: "Test submission received from Emma Davis.", type: "task", status: "read" },
-    { id: 3, message: "John Smith has a question about the last lesson.", type: "query", status: "unread" },
-    { id: 4, message: "New features have been added to the dashboard.", type: "update", status: "archived" },
-    { id: 5, message: "Sarah Wilson needs clarification on the project.", type: "query", status: "unread" },
-    { id: 6, message: "New assignment: Science Project due next week.", type: "task", status: "read" },
-    { id: 7, message: "Scheduled maintenance on Friday.", type: "update", status: "unread" },
-  ];
+  useEffect(() => {
+    // Replace with actual data fetching logic
+    const randomDate = () => {
+      const start = new Date(2023, 0, 1); // Start date
+      const end = new Date(); // Current date
+      const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+      return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    };
 
-  // Filter notifications based on type and status
+    setNotifications([
+      { id: 1, message: "New assignment: Math Homework due next week.", type: "task", status: "unread", date: randomDate() },
+      { id: 2, message: "Test submission received from Emma Davis.", type: "task", status: "read", date: randomDate() },
+      { id: 3, message: "John Smith has a question about the last lesson.", type: "query", status: "unread", date: randomDate() },
+      { id: 4, message: "New features have been added to the dashboard.", type: "update", status: "archived", date: randomDate() },
+      { id: 5, message: "Sarah Wilson needs clarification on the project.", type: "query", status: "unread", date: randomDate() },
+      { id: 6, message: "New assignment: Science Project due next week.", type: "task", status: "read", date: randomDate() },
+      { id: 7, message: "Scheduled maintenance on Friday.", type: "update", status: "unread", date: randomDate() },
+    ]);
+  }, []);
+
+  // Filter notifications based on search query and filters
   const filteredNotifications = notifications.filter(notification => {
     const typeMatch = filterType === 'all' || notification.type === filterType;
     const statusMatch = filterStatus === 'all' || notification.status === filterStatus;
-    return typeMatch && statusMatch;
+    const searchMatch = notification.message.toLowerCase().includes(searchQuery.toLowerCase());
+    return typeMatch && statusMatch && searchMatch;
   });
 
   // Sort notifications
@@ -54,54 +67,76 @@ const Notifications = () => {
   });
 
   const markAllAsRead = () => {
-    // Update all notifications to read
     notifications.forEach(notification => {
       notification.status = 'read';
     });
-    setNotificationMessage('All notifications marked as read.');
+    setResponseMessage('All notifications marked as read.'); // Set response message
     setTimeout(() => {
-      setNotificationMessage(''); // Clear the message after a few seconds
+      setResponseMessage(''); // Clear the response message after a few seconds
     }, 3000);
   };
 
   return (
     <div className="notifications">
-      <h2>Notifications</h2>
-      <button onClick={markAllAsRead} className="mark-as-read-btn">
-        <i className="fas fa-check-circle"></i> Mark All as Read
-      </button>
+      <div className="header-container">
+        <h2>Notifications</h2>
+        <button onClick={markAllAsRead} className="mark-as-read-btn">
+          <i className="fas fa-check-circle"></i> Mark All as Read
+        </button>
+      </div>
 
-      <div className="filters">
-        <label>Filter by Type:</label>
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-          <option value="all">All</option>
-          <option value="query">Student Queries</option>
-          <option value="task">New Tasks</option>
-          <option value="update">System Updates</option>
+      {/* Search and Filter Section */}
+      <div className="search-filter-section">
+        <input
+          type="text"
+          placeholder="Search notifications..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+        />
+        <select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          className="filter-select"
+        >
+          <option value="all">All Types</option>
+          <option value="task">Tasks</option>
+          <option value="query">Queries</option>
+          <option value="update">Updates</option>
         </select>
-
-        <label>Filter by Status:</label>
-        <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-          <option value="all">All</option>
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="filter-select"
+        >
+          <option value="all">All Statuses</option>
           <option value="unread">Unread</option>
           <option value="read">Read</option>
           <option value="archived">Archived</option>
         </select>
-
-        <label>Sort by:</label>
-        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-          <option value="latest">Newest</option>
-          <option value="oldest">Oldest</option>
-        </select>
+        
+        {/* Sort Order Button with Icons */}
+        <button
+          onClick={() => setSortOrder(sortOrder === 'latest' ? 'oldest' : 'latest')}
+          className="sort-order-btn"
+        >
+          {sortOrder === 'latest' ? (
+            <i className="fas fa-arrow-up"></i> // Up arrow for newest
+          ) : (
+            <i className="fas fa-arrow-down"></i> // Down arrow for oldest
+          )}
+        </button>
       </div>
 
       <div className="notification-section">
-        <h3>Notifications</h3>
         <ul>
           {sortedNotifications.length > 0 ? (
             sortedNotifications.map(notification => (
               <li key={notification.id} className={`notification ${notification.type} ${notification.status}`}>
-                {notification.message}
+                <div className="notification-message">
+                  {notification.message}
+                  <span className="notification-date">{notification.date}</span> {/* Display date */}
+                </div>
               </li>
             ))
           ) : (
@@ -110,11 +145,13 @@ const Notifications = () => {
         </ul>
       </div>
 
+      {/* Response Message Display */}
+      {responseMessage && <div className="response-message">{responseMessage}</div>}
+
       {/* Divider Line */}
       <hr className="divider" />
 
       <div className="settings-container">
-        <div className="notification-message">{notificationMessage}</div>
         <button className="notification-settings-btn" onClick={() => setShowSettings(true)}>
           Notification Settings
         </button>
