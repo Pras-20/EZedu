@@ -1586,58 +1586,60 @@ const TeacherDashboard = () => {
             <i className="fas fa-chart-line"></i>
           </span>
         </div>
-        <div className="stats-grid">
-          {Object.entries(statsData).map(([key, data]) => (
-            <div
-              key={key}
-              className={`stat-item ${selectedStat === key ? "selected" : ""}`}
-              onClick={() => handleStatClick(key)}
-            >
-              <span className="stat-label">
-                {key.replace(/([A-Z])/g, " $1").toLowerCase()}
-              </span>
-              <span className="stat-value">{data.value}</span>
-              <span
-                className={`stat-trend ${
-                  data.trend.startsWith("+")
-                    ? "positive"
-                    : data.trend === "0"
-                    ? ""
-                    : "negative"
-                }`}
+        <div className="stats-content">
+          <div className="stats-grid">
+            {Object.entries(statsData).map(([key, data]) => (
+              <div
+                key={key}
+                className={`stat-item ${selectedStat === key ? "selected" : ""}`}
+                onClick={() => handleStatClick(key)}
               >
-                {data.trend}
-              </span>
-              {selectedStat === key && (
-                <div className="stat-details">
-                  <p>{data.details}</p>
+                <span className="stat-label">
+                  {key.replace(/([A-Z])/g, " $1").toLowerCase()}
+                </span>
+                <span className="stat-value">{data.value}</span>
+                <span
+                  className={`stat-trend ${
+                    data.trend.startsWith("+")
+                      ? "positive"
+                      : data.trend === "0"
+                      ? ""
+                      : "negative"
+                  }`}
+                >
+                  {data.trend}
+                </span>
+                {selectedStat === key && (
+                  <div className="stat-details">
+                    <p>{data.details}</p>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-              )}
-          </div>
-          ))}
-          </div>
-
-        <div className="grade-distribution">
-          <div className="grade-chart-placeholder">
-            <h3>Grade Distribution</h3>
-            <div className="mock-chart">
-              <div className="bar" style={{ height: "20%" }}></div>
-              <div className="bar" style={{ height: "40%" }}></div>
-              <div className="bar" style={{ height: "60%" }}></div>
-              <div className="bar" style={{ height: "80%" }}></div>
-              <div className="bar" style={{ height: "100%" }}></div>
-              <div className="bar" style={{ height: "80%" }}></div>
-              <div className="bar" style={{ height: "60%" }}></div>
-              <div className="bar" style={{ height: "40%" }}></div>
-              <div className="bar" style={{ height: "20%" }}></div>
-          </div>
-            <div className="grade-labels">
-              <span>0-20</span>
-              <span>21-40</span>
-              <span>41-60</span>
-              <span>61-80</span>
-              <span>81-100</span>
-          </div>
+          
+          <div className="grade-distribution">
+            <div className="grade-chart-placeholder">
+              <h3>Grade Distribution</h3>
+              <div className="mock-chart">
+                <div className="bar" style={{ height: "20%" }}></div>
+                <div className="bar" style={{ height: "40%" }}></div>
+                <div className="bar" style={{ height: "60%" }}></div>
+                <div className="bar" style={{ height: "80%" }}></div>
+                <div className="bar" style={{ height: "100%" }}></div>
+                <div className="bar" style={{ height: "80%" }}></div>
+                <div className="bar" style={{ height: "60%" }}></div>
+                <div className="bar" style={{ height: "40%" }}></div>
+                <div className="bar" style={{ height: "20%" }}></div>
+              </div>
+              <div className="grade-labels">
+                <span>0-20</span>
+                <span>21-40</span>
+                <span>41-60</span>
+                <span>61-80</span>
+                <span>81-100</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

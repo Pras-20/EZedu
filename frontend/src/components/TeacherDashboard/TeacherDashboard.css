@@ -27,6 +27,9 @@
   z-index: 1;
   max-height: none;
   overflow-y: auto;
+  margin-bottom: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 /* Top Row Sections */
@@ -80,17 +83,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e8f5e9;
-  background: white;
-  flex-shrink: 0;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e8f5e9;
   position: sticky;
   top: 0;
-  z-index: 5;
-  padding: 12px;
-  margin: -12px -12px 12px -12px;
-  border-radius: 8px 8px 0 0;
+  background: inherit;
+  z-index: 10;
 }
 
 .header-title {
@@ -779,6 +778,8 @@
   flex-direction: column;
   height: 100%;
   min-height: 400px;
+  max-height: 450px;
+  overflow-y: hidden;
 }
 
 .stats-section .section-header {
@@ -788,6 +789,8 @@
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 2px solid #e8f5e9;
+  background: var(--section-bg);
+  z-index: 10;
 }
 
 .stats-icon {
@@ -808,11 +811,18 @@
   color: white;
 }
 
+.stats-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 15px;
+  grid-template-rows: auto auto;
+  gap: 6px;
+  margin-bottom: 10px;
 }
 
 .stat-item {
@@ -905,22 +915,30 @@
 .grade-distribution {
   background: white;
   border-radius: 12px;
-  padding: 15px;
-  margin-top: 15px;
+  padding: 10px;
+  margin-top: 10px;
   border: 2px solid #e8f5e9;
+  max-height: none;
+  overflow-y: visible;
+  grid-column: 1 / -1; /* Span all columns */
 }
 
 .grade-chart-placeholder {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: 180px;
+  height: 150px;
 }
 
 .grade-chart-placeholder h3 {
   color: #2e7d32;
   margin: 0;
   text-align: center;
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 5px 0;
+  z-index: 5;
 }
 
 .mock-chart {
@@ -928,14 +946,14 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 10px;
-  padding: 20px;
+  gap: 8px;
+  padding: 15px;
   background: #f8f9fa;
   border-radius: 8px;
 }
 
 .mock-chart .bar {
-  width: 40px;
+  width: 35px;
   background: #2e7d32;
   border-radius: 4px 4px 0 0;
   transition: height 0.3s ease;
@@ -981,6 +999,8 @@
   flex-direction: column;
   height: 100%;
   min-height: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .overview-header {
@@ -992,8 +1012,8 @@
   font-weight: 600;
   color: #2e7d32;
   position: sticky;
-  top: 0;
-  z-index: 10;
+  top: 63px;
+  z-index: 9;
   border: 1px solid #e8f5e9;
   margin-bottom: 6px;
 }
@@ -1122,7 +1142,8 @@
   flex-direction: column;
   gap: 15px;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  max-height: 80vh;
 }
 
 .progress-header {
@@ -1130,6 +1151,12 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8f5e9;
 }
 
 .progress-title {
@@ -1311,7 +1338,7 @@
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   grid-column: 1 / -1;
-  overflow-y: auto;
+  overflow-y: visible;
   max-height: none;
   padding-bottom: 24px;
 }
@@ -1323,6 +1350,9 @@
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid #e8f5e9;
+  position: static;
+  background: white;
+  z-index: 1;
 }
 
 .achievements-title {
@@ -1385,6 +1415,38 @@
   color: #1b5e20;
 }
 
+.achievements-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  position: static;
+  background: white;
+  z-index: 1;
+  padding: 10px 0;
+}
+
+.filter-button {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #2e7d32;
+  background: white;
+  color: #2e7d32;
+}
+
+.filter-button:hover {
+  background: #e8f5e9;
+}
+
+.filter-button.active {
+  background: #2e7d32;
+  color: white;
+}
+
 .achievements-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -1392,6 +1454,7 @@
   margin-top: 20px;
   overflow-y: visible;
   padding-bottom: 24px;
+  padding-top: 10px;
 }
 
 .achievement-item {
@@ -1618,34 +1681,6 @@
 .badge-bronze {
   background: #fff3e0;
   color: #ef6c00;
-}
-
-.achievements-filters {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.filter-button {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid #2e7d32;
-  background: white;
-  color: #2e7d32;
-}
-
-.filter-button:hover {
-  background: #e8f5e9;
-}
-
-.filter-button.active {
-  background: #2e7d32;
-  color: white;
 }
 
 /* Global popup container */
@@ -2641,4 +2676,43 @@
 
 .answer-queries-btn i {
   font-size: 14px;
+}
+
+/* Scrollbar styling */
+.stats-grid::-webkit-scrollbar,
+.grade-distribution::-webkit-scrollbar,
+.overview-section::-webkit-scrollbar,
+.dashboard-section::-webkit-scrollbar,
+.progress-section::-webkit-scrollbar,
+.achievements-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.stats-grid::-webkit-scrollbar-track,
+.grade-distribution::-webkit-scrollbar-track,
+.overview-section::-webkit-scrollbar-track,
+.dashboard-section::-webkit-scrollbar-track,
+.progress-section::-webkit-scrollbar-track,
+.achievements-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.stats-grid::-webkit-scrollbar-thumb,
+.grade-distribution::-webkit-scrollbar-thumb,
+.overview-section::-webkit-scrollbar-thumb,
+.dashboard-section::-webkit-scrollbar-thumb,
+.progress-section::-webkit-scrollbar-thumb,
+.achievements-section::-webkit-scrollbar-thumb {
+  background: #c1e1c5;
+  border-radius: 4px;
+}
+
+.stats-grid::-webkit-scrollbar-thumb:hover,
+.grade-distribution::-webkit-scrollbar-thumb:hover,
+.overview-section::-webkit-scrollbar-thumb:hover,
+.dashboard-section::-webkit-scrollbar-thumb:hover,
+.progress-section::-webkit-scrollbar-thumb:hover,
+.achievements-section::-webkit-scrollbar-thumb:hover {
+  background: #2e7d32;
 }
